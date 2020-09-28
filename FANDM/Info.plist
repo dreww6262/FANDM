@@ -60,5 +60,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Fonts/Poppins/Poppins-Regular.ttf</string>
+		<string>Fonts/Poppins/Poppins-SemiBold.ttf</string>
+	</array>
 </dict>
 </plist>
