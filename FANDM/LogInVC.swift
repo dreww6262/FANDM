@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Firebase
 
 class LogInVC: UIViewController {
+    
+    let usernameInput = UITextField()
+    let pswdInput = UITextField()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,15 +27,15 @@ class LogInVC: UIViewController {
         logoPic.image = UIImage(named: "Logo")
         logoPic.contentMode = .scaleAspectFit
         
-        let usernameInput = UITextField()
+        
         view.addSubview(usernameInput)
         usernameInput.font = UIFont(name: "Poppins-SemiBold", size: 18)
         usernameInput.frame = CGRect(x: 32, y: view.frame.midY - 100, width: view.frame.width - 64, height: 20)
         usernameInput.backgroundColor = .clear
         usernameInput.textColor = .white
-        usernameInput.attributedPlaceholder = NSAttributedString(string: "Username", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        usernameInput.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         
-        let pswdInput = UITextField()
+        
         view.addSubview(pswdInput)
         pswdInput.font = UIFont(name: "Poppins-SemiBold", size: 18)
         pswdInput.frame = CGRect(x: 32, y: usernameInput.frame.maxY + 32, width: view.frame.width - 64, height: 20)
@@ -98,7 +102,38 @@ class LogInVC: UIViewController {
     }
     
     @objc func logInPressed(_ sender: UITapGestureRecognizer) {
-        performSegue(withIdentifier: "rewindFromLogIn", sender: self)
+        let auth = Auth.auth()
+        
+        if (usernameInput.text!.isEmpty && pswdInput.text!.isEmpty) {
+            let alert = UIAlertController(title: "Unable to sign in.", message: "Please enter your email and password.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        else if (usernameInput.text!.isEmpty) {
+            let alert = UIAlertController(title: "Unable to sign in.", message: "Please enter your email.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        else if (pswdInput.text!.isEmpty) {
+            let alert = UIAlertController(title: "Unable to sign in.", message: "Please enter your password.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        auth.signIn(withEmail: usernameInput.text!, password: pswdInput.text!, completion:  { result, error   in
+            if error != nil {
+                let alert = UIAlertController(title: "Unable to sign in.", message: "Invalid email or password.  Please try again.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                return
+            }
+            self.performSegue(withIdentifier: "rewindFromLogIn", sender: self)
+        })
     }
     
     @objc func forgotPressed(_ sender: UITapGestureRecognizer) {
@@ -112,7 +147,8 @@ class LogInVC: UIViewController {
     }
     
     func clearInputs() {
-        
+        usernameInput.text = ""
+        pswdInput.text = ""
     }
     /*
     // MARK: - Navigation

@@ -9,6 +9,15 @@
 import UIKit
 
 class DefaultStoreCell: UICollectionViewCell {
+    let name = UILabel()
+    let image = UIImageView()
+    let favButton = UIButton()
+    var store: Store?
     
+    override func layoutSubviews() {
+        contentView.addSubview(name)
+        contentView.addSubview(image)
+        contentView.addSubview(favButton)
+    }
     
 }

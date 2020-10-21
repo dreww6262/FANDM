@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import Firebase
 
 
 class AccountVC: UIViewController {
     
     //var user: User?
     //var userData: UserData?
+    
+    var infoChild: AccountInfoVC?
+    var infoView: UIView?
+    var userData: UserData?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let navBar = navigationController?.navigationBar
         navBar?.barTintColor = UIColor.white
         navBar?.isTranslucent = false
@@ -93,6 +98,32 @@ class AccountVC: UIViewController {
     
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if Auth.auth().currentUser != nil {
+            // present account information
+//            let alert = UIAlertController(title: "already signed in", message: "dingus", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "True", style: .default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
+            
+            if (infoChild == nil || infoView == nil){
+                infoView?.removeFromSuperview()
+                infoChild?.removeFromParent()
+                infoChild = AccountInfoVC()
+                infoView = infoChild!.view
+                addChild(infoChild!)
+                view.addSubview(infoView!)
+                infoView?.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - ((tabBarController?.tabBar.frame.height) ?? 0))
+                infoChild!.setup()
+            }
+            
+            // Alert made above.  actually use this to transition to account info
+        }
+        else {
+            infoView?.removeFromSuperview()
+            infoChild?.removeFromParent()
+        }
+    }
+    
     @objc func logInPressed(_ sender: UITapGestureRecognizer) {
         let logInVC = storyboard!.instantiateViewController(identifier: "logInVC")
         self.present(logInVC, animated: false, completion: nil)
@@ -107,8 +138,8 @@ class AccountVC: UIViewController {
     
     @IBAction func rewindToAccountAndSignIn(segue: UIStoryboardSegue) {
         let source = segue.source
-        if source is SignUpVC {
-            // signup logic
+        if source is SurveyVC {
+            // signup
         }
         else {
             // do nothing for now

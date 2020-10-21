@@ -9,11 +9,22 @@
 import UIKit
 
 class SurveyVC: UIViewController {
+    
+    var userData: UserData?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)
+        
+        let promptLabel = UILabel()
+        view.addSubview(promptLabel)
+        promptLabel.text = "Tell us a little about you..."
+        promptLabel.font = UIFont(name: "Poppins-SemiBold", size: 22)
+        promptLabel.textColor = .white
+        promptLabel.backgroundColor = .clear
+        promptLabel.sizeToFit()
+        promptLabel.frame = CGRect(x: (view.frame.width - 280) / 2, y: view.frame.midY - 200, width: promptLabel.frame.width, height: promptLabel.frame.height)
         
         let skipButtom = UIButton()
         view.addSubview(skipButtom)
@@ -56,6 +67,13 @@ class SurveyVC: UIViewController {
     
     func clearInputs() {
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.destination is AccountVC {
+            let dest = segue.destination as! AccountVC
+            dest.userData = userData
+        }
     }
     
 

@@ -473,10 +473,91 @@
                     <view key="view" contentMode="scaleToFill" id="QXI-X0-NCE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n2d-1T-ktG">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="yqS-F0-ZVR">
+                                        <rect key="frame" x="-87" y="42" width="588" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </searchBar>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="filter by:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MO2-Mf-vQT">
+                                        <rect key="frame" x="-71" y="46" width="382" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="sKN-7X-Pin">
+                                        <rect key="frame" x="-71" y="46" width="382" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="u8v-3a-AMA">
+                                            <size key="itemSize" width="71" height="57"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" reuseIdentifier="filterCell" id="nAW-IH-3rp" customClass="FilterCell" customModule="FANDM" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83" height="36"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" insetsLayoutMarginsFromSafeArea="NO" id="q03-Dt-bDG">
+                                                    <rect key="frame" x="0.0" y="0.0" width="83" height="36"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWn-uf-UV5">
+                                                            <rect key="frame" x="8" y="3" width="67" height="30"/>
+                                                            <state key="normal" title="FilterButton">
+                                                                <color key="titleColor" red="0.25098039220000001" green="0.45882352939999999" blue="0.52549019610000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" red="0.8980392157" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="zWn-uf-UV5" secondAttribute="bottom" constant="3" id="0eY-Cp-CH7"/>
+                                                        <constraint firstItem="zWn-uf-UV5" firstAttribute="top" secondItem="q03-Dt-bDG" secondAttribute="top" constant="3" id="hkV-Kz-KVF"/>
+                                                        <constraint firstAttribute="trailing" secondItem="zWn-uf-UV5" secondAttribute="trailing" constant="8" id="i7C-h0-oLG"/>
+                                                        <constraint firstItem="zWn-uf-UV5" firstAttribute="leading" secondItem="q03-Dt-bDG" secondAttribute="leading" constant="8" id="pyi-3X-T0l"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="6"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </collectionViewCellContentView>
+                                                <size key="customSize" width="83" height="36"/>
+                                                <connections>
+                                                    <outlet property="filterButton" destination="zWn-uf-UV5" id="7Pb-Fd-khf"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="cdY-2q-Eof" id="XqC-ct-NSL"/>
+                                            <outlet property="delegate" destination="cdY-2q-Eof" id="QNA-6t-hgq"/>
+                                        </connections>
+                                    </collectionView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="DvD-qA-HxX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="n2d-1T-ktG" firstAttribute="leading" secondItem="DvD-qA-HxX" secondAttribute="leading" id="XLy-j1-Mog"/>
+                            <constraint firstItem="DvD-qA-HxX" firstAttribute="bottom" secondItem="n2d-1T-ktG" secondAttribute="bottom" id="ppl-M3-fGw"/>
+                            <constraint firstItem="n2d-1T-ktG" firstAttribute="top" secondItem="DvD-qA-HxX" secondAttribute="top" id="qhh-st-b5R"/>
+                            <constraint firstItem="DvD-qA-HxX" firstAttribute="trailing" secondItem="n2d-1T-ktG" secondAttribute="trailing" id="tUG-iM-IOC"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Directory" id="wMz-6x-OV9"/>
+                    <connections>
+                        <outlet property="contentView" destination="n2d-1T-ktG" id="oL6-a2-ZUG"/>
+                        <outlet property="filterButtonCollection" destination="sKN-7X-Pin" id="d8i-c9-5UR"/>
+                        <outlet property="filterByLabel" destination="MO2-Mf-vQT" id="C80-Tb-HOO"/>
+                        <outlet property="searchBar" destination="yqS-F0-ZVR" id="KQ7-8H-GW1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lc0-Yb-d9G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Firebase
+import SDWebImage
 
 class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return homeItemList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -37,19 +39,29 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         cell.contentView.addSubview(promoImage)
         
         promoImage.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height * 0.55)
-        promoImage.image = UIImage(named: "firstandmaindefault")
+        let url = URL(string: homeItemList[indexPath.row].imageString)
+        if (url != nil) {
+            promoImage.sd_setImage(with: url!, completed: { _,err,_,_  in
+                if (err != nil) {
+                    promoImage.image = UIImage(named: "firstandmaindefault")
+                }
+            })
+        }
+        else {
+            promoImage.image = UIImage(named: "firstandmaindefault")
+        }
         promoImage.contentMode = .scaleAspectFill
         
         titleLabel.frame = CGRect(x: 8, y: promoImage.frame.maxY + 16, width: cell.frame.width - 16, height: 16)
         titleLabel.textAlignment = .left
-        titleLabel.text = "Title Label"
+        titleLabel.text = homeItemList[indexPath.row].name
         titleLabel.numberOfLines = 1
         titleLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
         cell.contentView.bringSubviewToFront(titleLabel)
         
         descriptionLabel.frame = CGRect(x: 8, y: promoImage.frame.maxY + 36, width: cell.frame.width - 16, height: 14)
         descriptionLabel.textAlignment = .left
-        descriptionLabel.text = "Text description.  (Can be multiple lines)fjhd kslahfjdklahfjdks ghjdsl kjdskafhjd sakhfd aksjhf"
+        descriptionLabel.text = homeItemList[indexPath.row].description
         descriptionLabel.numberOfLines = 3
         descriptionLabel.sizeToFit()
         descriptionLabel.font = UIFont(name: "Poppins-SemiBold", size: 12)
@@ -72,14 +84,17 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
 
     @IBOutlet weak var featuredCollection: UICollectionView!
+    var homeItemList = [HomeItem]()
+    let db = Firestore.firestore()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpNavBar()
         setUpFeaturedCollection()
-        
+        pullHomeitems()
     }
+
     
     func setUpNavBar() {
         let navBar = navigationController?.navigationBar
@@ -114,6 +129,19 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
 
         featuredCollection.collectionViewLayout = layout
         featuredCollection.backgroundColor = .white
+    }
+    
+    func pullHomeitems() {
+        db.collection("Home").getDocuments(completion: { obj, error in
+            guard let docs = obj?.documents else {
+                return
+            }
+            
+            for doc in docs {
+                self.homeItemList.append(HomeItem(dictionary: doc.data()))
+            }
+            self.featuredCollection.reloadData()
+        })
     }
     
 

@@ -8,6 +8,8 @@
 
 import UIKit
 import SDWebImage
+import Firebase
+
 
 class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
     
@@ -35,14 +37,75 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
     
     @IBOutlet weak var entertainmentCollection: UICollectionView!
     
+    var restaurantList = [Store]()
+    var shopsList = [Store]()
+    var servicesList = [Store]()
+    var entertainmentList = [Store]()
+    var favList = [Store]()
+    var offerList = [Store]() //  make offer class
+    var popularList = [Store]()
     
+    var unassignedStores = [Store]()
     
+    var db = Firestore.firestore()
+    var storage = Storage.storage().reference()
+    var userData: UserData?
+    var userDataRef: DocumentReference?
+    
+    let favEmpty = UILabel()
+    let offersEmpty = UILabel()
+    let popularEmpty = UILabel()
+        
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == filterButtonCollection {
+        switch collectionView {
+        case filterButtonCollection:
             return 4
+        case favCollection:
+
+            if favList.count == 0 {
+                favEmpty.isHidden = false
+                favCollection.frame = CGRect(x: favCollection.frame.minX, y: favCollection.frame.minY, width: favCollection.frame.width, height: 80)
+            }
+            else {
+                favEmpty.isHidden = true
+                favCollection.frame = CGRect(x: favCollection.frame.minX, y: favCollection.frame.minY, width: favCollection.frame.width, height: view.frame.height/4)
+            }
+            fixLocations()
+            return favList.count
+        case offerCollection:
+            if offerList.count == 0 {
+                offersEmpty.isHidden = false
+                offerCollection.frame = CGRect(x: offerCollection.frame.minX, y: offerCollection.frame.minY, width: offerCollection.frame.width, height: 80)
+            }
+            else {
+                offersEmpty.isHidden = true
+                offerCollection.frame = CGRect(x: offerCollection.frame.minX, y: offerCollection.frame.minY, width: offerCollection.frame.width, height: view.frame.height/4)
+            }
+            fixLocations()
+            return offerList.count
+        case popularCollection:
+            if popularList.count == 0 {
+                popularEmpty.isHidden = false
+                popularCollection.frame = CGRect(x: popularCollection.frame.minX, y: popularCollection.frame.minY, width: popularCollection.frame.width, height: 80)
+            }
+            else {
+                popularEmpty.isHidden = true
+                popularCollection.frame = CGRect(x: popularCollection.frame.minX, y: popularCollection.frame.minY, width: popularCollection.frame.width, height: view.frame.height/4)
+            }
+            fixLocations()
+            return popularList.count
+        case restaurantCollection:
+            return restaurantList.count
+        case shopsCollection:
+            return shopsList.count
+        case servicesCollection:
+            return servicesList.count
+        case entertainmentCollection:
+            return entertainmentList.count
+        default:
+            return 6
         }
-        return 6
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -73,6 +136,8 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
             cell.addGestureRecognizer(offerTap)
             
             // set up image
+            
+            
             cell.storeImage?.image = UIImage(named: "firstandmaindefault")
             cell.storeImage?.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
             cell.storeImage?.contentMode = .scaleAspectFill
@@ -93,10 +158,12 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "defaultStoreCell", for: indexPath) as! DefaultStoreCell
-            cell.frame = CGRect(x: cell.frame.minX, y: cell.frame.minY, width: 120, height: collectionView.frame.height)
+            cell.contentView.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
             
             cell.contentView.layer.cornerRadius = 8
             cell.contentView.clipsToBounds = true
+            cell.backgroundView?.clipsToBounds = true
+            cell.clipsToBounds = true
             //cell.layer.cornerRadius = 8
             cell.layer.masksToBounds = false
             cell.backgroundColor = .clear
@@ -106,35 +173,85 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
             cell.layer.shadowOpacity = 0.5
             cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
             
-            let offerTap = UITapGestureRecognizer(target: self, action: #selector(offerCellClicked))
-            cell.addGestureRecognizer(offerTap)
+//            let offerTap = UITapGestureRecognizer(target: self, action: #selector(offerCellClicked))
+//            cell.addGestureRecognizer(offerTap)
             
-            let favButton = UIButton()
-            cell.contentView.addSubview(favButton)
-            favButton.frame = CGRect(x: cell.frame.width - 25, y: cell.frame.height - 25, width: 20, height: 20)
-            favButton.backgroundColor = .clear
-            favButton.tintColor = .clear
-            favButton.setTitle("", for: .normal)
-            favButton.setImage(UIImage(named: "curvedempty"), for: .normal)
-            favButton.imageView?.frame = CGRect(x: 0, y: 0, width: favButton.frame.width, height: favButton.frame.height)
-            favButton.imageView?.contentMode = .scaleAspectFit
             
-            let storeNameLabel = UILabel()
-            cell.contentView.addSubview(storeNameLabel)
-            storeNameLabel.text = "Default"
-            storeNameLabel.font = UIFont(name: "Poppins-SemiBold", size: 12)
-            storeNameLabel.frame = CGRect(x: 5, y: cell.frame.height - 17, width: 70, height: 12)
-            storeNameLabel.textAlignment = .left
-            storeNameLabel.textColor = .black
+            
+            var store: Store?
+            var type: String?
+            switch collectionView {
+            case favCollection:
+                type = "fav"
+                store = favList[indexPath.row]
+            case popularCollection:
+                type = "popular"
+                store = unassignedStores.first(where: {s in
+                    return true
+                })
+            case restaurantCollection:
+                type = "restaurant"
+                store = restaurantList[indexPath.row]
+
+            case shopsCollection:
+                type = "shops"
+                store = shopsList[indexPath.row]
+
+            case servicesCollection:
+                type = "services"
+                store = servicesList[indexPath.row]
+
+            case entertainmentCollection:
+                type = "entertainment"
+                store = entertainmentList[indexPath.row]
+
+            default:
+                print("Error")
+                store = Store(name: "error", description: "error", imageLink: "error", type: "error")
+            }
+            
+            cell.store = store
+            cell.name.text = store!.name
+            cell.name.font = UIFont(name: "Poppins-SemiBold", size: 14)
+            cell.name.sizeToFit()
+            cell.name.frame = CGRect(x: 10, y: cell.frame.height - 25, width: cell.name.frame.width, height: cell.name.frame.height)
+            cell.name.textAlignment = .left
+            cell.name.textColor = .black
+            cell.contentView.backgroundColor = .white
+            
+            cell.favButton.frame = CGRect(x: cell.frame.width - 25, y: cell.frame.height - 25, width: 20, height: 20)
+            cell.favButton.backgroundColor = .clear
+            cell.favButton.tintColor = .clear
+            cell.favButton.setTitle("", for: .normal)
+            if (userData != nil && userData!.favoriteStores.contains(store!.name)) {
+                cell.favButton.setImage(UIImage(named: "curvedfilled"), for: .normal)
+                favList.append(store!)
+            }
+            else {
+                cell.favButton.setImage(UIImage(named: "curvedempty"), for: .normal)
+            }
+            cell.favButton.imageView?.frame = CGRect(x: 0, y: 0, width: cell.favButton.frame.width, height: cell.favButton.frame.height)
+            cell.favButton.imageView?.contentMode = .scaleAspectFit
+            let favTapped = UITapGestureRecognizer(target: self, action: #selector(handleFavButton))
+            cell.favButton.addGestureRecognizer(favTapped)
+            
+            let url = URL(string: store!.imageLink)
             
             // set up image
-            let imageView = UIImageView()
-            cell.contentView.addSubview(imageView)
-            imageView.image = UIImage(named: "firstandmaindefault")
-            imageView.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
-            imageView.contentMode = .scaleAspectFill
+            cell.image.sd_setImage(with: url, completed: { a, error, c, d in
+                if error != nil {
+                    cell.image.image = UIImage(named: "firstandmaindefault")
+                }
+                cell.contentView.bringSubviewToFront(cell.name)
+            })
             
-            cell.contentView.sendSubviewToBack(imageView)
+            cell.image.frame = CGRect(x: 0, y: 0, width: cell.contentView.frame.width, height: cell.favButton.frame.minY - 5)
+            cell.image.contentMode = .scaleToFill
+            cell.image.clipsToBounds = true
+            
+            
+            cell.contentView.sendSubviewToBack(cell.image)
+            cell.contentView.bringSubviewToFront(cell.name)
             
             return cell
         }
@@ -156,7 +273,8 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         setUpNavBar()
         setUpSearchBar()
         
-        filterByLabel.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        filterByLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        filterByLabel.sizeToFit()
         filterByLabel.frame = CGRect(x: 8, y: searchBar.frame.maxY + 16, width: filterByLabel.frame.width, height: filterByLabel.frame.height)
         
         setUpFilterButtonCollection()
@@ -168,10 +286,77 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         setUpServicesCollection()
         setUpEntertainmentCollection()
         
+        setUpEmptyLabels()
+        
         contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: entertainmentCollection.frame.maxY + 16)
         print(contentView.frame.height)
         contentView.isUserInteractionEnabled = true
         scrollView.contentSize = contentView.frame.size
+        
+        db.collection("Stores").addSnapshotListener({ object, error in
+            guard let documents = object?.documents else {
+                return
+            }
+            self.unassignedStores.removeAll(keepingCapacity: true)
+            self.shopsList.removeAll(keepingCapacity: true)
+            self.restaurantList.removeAll(keepingCapacity: true)
+            self.servicesList.removeAll(keepingCapacity: true)
+            self.entertainmentList.removeAll(keepingCapacity: true)
+            
+            for doc in documents {
+                let store = Store(dictionary: doc.data())
+                self.unassignedStores.append(store)
+                switch store.type {
+                case "Shops":
+                    self.shopsList.append(store)
+                case "Dining & Bevs":
+                    self.restaurantList.append(store)
+                case "Services":
+                    self.servicesList.append(store)
+                case "Entertainment":
+                    self.entertainmentList.append(store)
+                default:
+                    print("did not get correct type")
+                }
+            }
+            self.reloadCollections()
+        })
+        
+    }
+    
+    func reloadCollections() {
+        favList.removeAll(keepingCapacity: true)
+        offerCollection.reloadData()
+        popularCollection.reloadData()
+        shopsCollection.reloadData()
+        servicesCollection.reloadData()
+        restaurantCollection.reloadData()
+        entertainmentCollection.reloadData()
+        favCollection.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchBar.text = ""
+        searchBar.endEditing(true)
+        
+        let user = Auth.auth().currentUser
+        if (user != nil) {
+            if (userData == nil || userData!.email != user?.email) {
+                db.collection("UserData").whereField("email", isEqualTo: user!.email!).getDocuments(completion: { obj, error in
+                    guard let docs = obj?.documents else {
+                        return
+                    }
+                    if (docs.count > 0) {
+                        self.userData = UserData(dictionary: docs[0].data())
+                        self.userDataRef = docs[0].reference
+                    }
+                    self.reloadCollections()
+                })
+            }
+        }
+        
+        
     }
     
     func setUpNavBar() {
@@ -200,12 +385,12 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         let favLabel = UILabel()
         contentView.addSubview(favLabel)
         favLabel.text = "Your Favorites"
-        favLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        favLabel.frame = CGRect(x: 8, y: filterButtonCollection.frame.maxY + 16, width: 150, height: 14)
+        favLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        favLabel.frame = CGRect(x: 8, y: filterButtonCollection.frame.maxY + 20, width: 150, height: 14)
         favLabel.textColor = .black
         favLabel.textAlignment = .left
         
-        favCollection.frame = CGRect(x: 8, y: favLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        favCollection.frame = CGRect(x: 8, y: favLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         favCollection.backgroundColor = .black
         
         favCollection.showsHorizontalScrollIndicator = false
@@ -220,7 +405,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -228,18 +413,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         favCollection.backgroundColor = .white
     }
     
-    
+    let offerLabel = UILabel()
     func setUpOfferCollection() {
-        let offerLabel = UILabel()
         contentView.addSubview(offerLabel)
         offerLabel.text = "Offers"
-        offerLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        offerLabel.frame = CGRect(x: 8, y: favCollection.frame.maxY + 16, width: 150, height: 14)
+        offerLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        offerLabel.frame = CGRect(x: 8, y: favCollection.frame.maxY + 20, width: 150, height: 14)
         offerLabel.textColor = .black
         offerLabel.textAlignment = .left
         
         //offerCollection.register(OfferCell.self, forCellWithReuseIdentifier: "offerCell")
-        offerCollection.frame = CGRect(x: 8, y: offerLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        offerCollection.frame = CGRect(x: 8, y: offerLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         //offerCollection.allowsMultipleSelection = false
         offerCollection.showsHorizontalScrollIndicator = false
         offerCollection.canCancelContentTouches = true
@@ -253,7 +437,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -262,16 +446,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
     }
     
+    let popLabel = UILabel()
     func setUpPopularCollection() {
-        let popLabel = UILabel()
+        
         contentView.addSubview(popLabel)
         popLabel.text = "Popular"
-        popLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        popLabel.frame = CGRect(x: 8, y: offerCollection.frame.maxY + 16, width: 150, height: 14)
+        popLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        popLabel.frame = CGRect(x: 8, y: offerCollection.frame.maxY + 20, width: 150, height: 14)
         popLabel.textColor = .black
         popLabel.textAlignment = .left
         
-        popularCollection.frame = CGRect(x: 8, y: popLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        popularCollection.frame = CGRect(x: 8, y: popLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         popularCollection.backgroundColor = .black
         
         popularCollection.showsHorizontalScrollIndicator = false
@@ -286,7 +471,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -295,16 +480,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
     }
     
+    let restLabel = UILabel()
     func setUpRestaurantCollection() {
-        let restLabel = UILabel()
+        
         contentView.addSubview(restLabel)
         restLabel.text = "Restaurants"
-        restLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        restLabel.frame = CGRect(x: 8, y: popularCollection.frame.maxY + 16, width: 150, height: 14)
+        restLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        restLabel.frame = CGRect(x: 8, y: popularCollection.frame.maxY + 20, width: 150, height: 14)
         restLabel.textColor = .black
         restLabel.textAlignment = .left
         
-        restaurantCollection.frame = CGRect(x: 8, y: restLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        restaurantCollection.frame = CGRect(x: 8, y: restLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         restaurantCollection.backgroundColor = .black
         
         restaurantCollection.showsHorizontalScrollIndicator = false
@@ -319,7 +505,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -328,16 +514,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
     }
     
+    let shopsLabel = UILabel()
     func setUpShopsCollection() {
-        let shopsLabel = UILabel()
+        
         contentView.addSubview(shopsLabel)
         shopsLabel.text = "Shops"
-        shopsLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        shopsLabel.frame = CGRect(x: 8, y: restaurantCollection.frame.maxY + 16, width: 150, height: 14)
+        shopsLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        shopsLabel.frame = CGRect(x: 8, y: restaurantCollection.frame.maxY + 20, width: 150, height: 14)
         shopsLabel.textColor = .black
         shopsLabel.textAlignment = .left
         
-        shopsCollection.frame = CGRect(x: 8, y: shopsLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        shopsCollection.frame = CGRect(x: 8, y: shopsLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         shopsCollection.backgroundColor = .black
         
         shopsCollection.showsHorizontalScrollIndicator = false
@@ -352,7 +539,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -361,16 +548,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
     }
     
+    let servicesLabel = UILabel()
     func setUpServicesCollection() {
-        let offerLabel = UILabel()
-        contentView.addSubview(offerLabel)
-        offerLabel.text = "Services"
-        offerLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        offerLabel.frame = CGRect(x: 8, y: shopsCollection.frame.maxY + 16, width: 150, height: 14)
-        offerLabel.textColor = .black
-        offerLabel.textAlignment = .left
         
-        servicesCollection.frame = CGRect(x: 8, y: offerLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        contentView.addSubview(servicesLabel)
+        servicesLabel.text = "Services"
+        servicesLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        servicesLabel.frame = CGRect(x: 8, y: shopsCollection.frame.maxY + 20, width: 150, height: 14)
+        servicesLabel.textColor = .black
+        servicesLabel.textAlignment = .left
+        
+        servicesCollection.frame = CGRect(x: 8, y: servicesLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         servicesCollection.backgroundColor = .black
         
         servicesCollection.showsHorizontalScrollIndicator = false
@@ -385,7 +573,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -394,16 +582,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
     }
     
+    let entLabel = UILabel()
     func setUpEntertainmentCollection() {
-        let entLabel = UILabel()
+        
         contentView.addSubview(entLabel)
         entLabel.text = "Entertainment"
-        entLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        entLabel.frame = CGRect(x: 8, y: servicesCollection.frame.maxY + 16, width: 150, height: 14)
+        entLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        entLabel.frame = CGRect(x: 8, y: servicesCollection.frame.maxY + 20, width: 150, height: 14)
         entLabel.textColor = .black
         entLabel.textAlignment = .left
         
-        entertainmentCollection.frame = CGRect(x: 8, y: entLabel.frame.maxY + 8, width: view.frame.width - 16, height: 120)
+        entertainmentCollection.frame = CGRect(x: 8, y: entLabel.frame.maxY + 12, width: view.frame.width - 16, height: view.frame.height/4)
         entertainmentCollection.backgroundColor = .black
         
         entertainmentCollection.showsHorizontalScrollIndicator = false
@@ -418,7 +607,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: itemSize, height: itemSize)
 
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
 
@@ -427,8 +616,95 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
     }
     
+    func setUpEmptyLabels() {
+        contentView.addSubview(favEmpty)
+        if (Auth.auth().currentUser == nil) {
+            favEmpty.text = "Sign in to add favorites!"
+        }
+        else {
+            favEmpty.text = "Add favorites to see them here!"
+        }
+        favEmpty.font = UIFont(name: "Poppins-SemiBold", size: 18)
+        favEmpty.textColor = .white
+        favEmpty.frame = CGRect(x: 20, y: favCollection.frame.minY + 20, width: contentView.frame.width - 40, height: 40)
+        favEmpty.textAlignment = .center
+        favEmpty.backgroundColor = UIColor(red: 0.25, green: 0.46, blue: 0.53, alpha: 1.00)
+        favEmpty.layer.cornerRadius = 10
+        favEmpty.clipsToBounds = true
+        if (favList.count != 0) {
+            favEmpty.isHidden = true
+        }
+        
+        contentView.addSubview(offersEmpty)
+        offersEmpty.text = "No offers available right now."
+        offersEmpty.font = UIFont(name: "Poppins-SemiBold", size: 18)
+        offersEmpty.textColor = .white
+        offersEmpty.frame = CGRect(x: 20, y: offerCollection.frame.minY + 20, width: view.frame.width - 40, height: 40)
+        offersEmpty.textAlignment = .center
+        offersEmpty.backgroundColor = UIColor(red: 0.25, green: 0.46, blue: 0.53, alpha: 1.00)
+        offersEmpty.layer.cornerRadius = 10
+        offersEmpty.clipsToBounds = true
+        if (offerList.count != 0) {
+            offersEmpty.isHidden = true
+        }
+        
+        contentView.addSubview(popularEmpty)
+        popularEmpty.text = "No popular available right now."
+        popularEmpty.font = UIFont(name: "Poppins-SemiBold", size: 18)
+        popularEmpty.textColor = .white
+        popularEmpty.frame = CGRect(x: 20, y: popularCollection.frame.minY + 20, width: view.frame.width - 40, height: 40)
+        popularEmpty.textAlignment = .center
+        popularEmpty.backgroundColor = UIColor(red: 0.25, green: 0.46, blue: 0.53, alpha: 1.00)
+        popularEmpty.layer.cornerRadius = 10
+        popularEmpty.clipsToBounds = true
+        if (popularList.count != 0) {
+            popularEmpty.isHidden = true
+        }
+    }
     
-
-
+    func fixLocations() {
+        offerLabel.frame = CGRect(x: 8, y: favCollection.frame.maxY + 20, width: offerLabel.frame.width, height: offerLabel.frame.height)
+        offerCollection.frame = CGRect(x: 8, y: offerLabel.frame.maxY + 12, width: view.frame.width - 16, height: offerCollection.frame.height)
+        offersEmpty.frame = CGRect(x: 20, y: offerCollection.frame.minY + 20, width: view.frame.width - 40, height: 40)
+        
+        popLabel.frame = CGRect(x: 8, y: offerCollection.frame.maxY + 20, width: 150, height: 14)
+        popularCollection.frame = CGRect(x: 8, y: popLabel.frame.maxY + 12, width: view.frame.width - 16, height: popularCollection.frame.height)
+        popularEmpty.frame = CGRect(x: 20, y: popularCollection.frame.minY + 20, width: view.frame.width - 40, height: 40)
+        
+        restLabel.frame = CGRect(x: 8, y: popularCollection.frame.maxY + 20, width: 150, height: 14)
+        restaurantCollection.frame = CGRect(x: 8, y: restLabel.frame.maxY + 12, width: view.frame.width - 16, height: restaurantCollection.frame.height)
+        
+        shopsLabel.frame = CGRect(x: 8, y: restaurantCollection.frame.maxY + 20, width: 150, height: 14)
+        shopsCollection.frame = CGRect(x: 8, y: shopsLabel.frame.maxY + 12, width: view.frame.width - 16, height: shopsCollection.frame.height)
+        
+        servicesLabel.frame = CGRect(x: 8, y: shopsCollection.frame.maxY + 20, width: 150, height: 14)
+        servicesCollection.frame = CGRect(x: 8, y: servicesLabel.frame.maxY + 12, width: view.frame.width - 16, height: servicesCollection.frame.height)
+        
+        entLabel.frame = CGRect(x: 8, y: servicesCollection.frame.maxY + 20, width: 150, height: 14)
+        entertainmentCollection.frame = CGRect(x: 8, y: entLabel.frame.maxY + 12, width: view.frame.width - 16, height: entertainmentCollection.frame.height)
+        
+        contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: entertainmentCollection.frame.maxY + 16)
+        scrollView.contentSize = contentView.bounds.size
+    }
+    
+    @objc func handleFavButton(_ sender: UITapGestureRecognizer) {
+        let cell = sender.view?.superview?.superview as! DefaultStoreCell
+        let store = cell.name.text!
+        
+        if (userData == nil) {
+            return
+        }
+        else if (userData!.favoriteStores.contains(store)) {
+            userData?.favoriteStores.removeAll(where: { string in
+                return string == store
+            })
+        }
+        else {
+            userData?.favoriteStores.append(store)
+        }
+        reloadCollections()
+        userDataRef?.setData(userData!.dictionary)
+    }
+    
 }
 
