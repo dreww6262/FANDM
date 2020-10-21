@@ -16,11 +16,11 @@
 		5B32ACB7250FDE6B00A8212B /* AccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACB6250FDE6B00A8212B /* AccountVC.swift */; };
 		5B32ACB9250FDE8600A8212B /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACB8250FDE8600A8212B /* MapVC.swift */; };
 		5B32ACBB250FF8F600A8212B /* NewsItemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */; };
+		5B5F26702540B94F005AAC8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B5F266F2540B94F005AAC8B /* Assets.xcassets */; };
 		5B649506250FD922007139DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649505250FD922007139DB /* AppDelegate.swift */; };
 		5B649508250FD922007139DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649507250FD922007139DB /* SceneDelegate.swift */; };
 		5B64950A250FD922007139DB /* StoresVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649509250FD922007139DB /* StoresVC.swift */; };
 		5B64950D250FD922007139DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B64950B250FD922007139DB /* Main.storyboard */; };
-		5B64950F250FD924007139DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B64950E250FD924007139DB /* Assets.xcassets */; };
 		5B649512250FD924007139DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B649510250FD924007139DB /* LaunchScreen.storyboard */; };
 		5B64951D250FD924007139DB /* FANDMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B64951C250FD924007139DB /* FANDMTests.swift */; };
 		5B649528250FD924007139DB /* FANDMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649527250FD924007139DB /* FANDMUITests.swift */; };
@@ -65,12 +65,12 @@
 		5B32ACB6250FDE6B00A8212B /* AccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVC.swift; sourceTree = "<group>"; };
 		5B32ACB8250FDE8600A8212B /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemDetailsVC.swift; sourceTree = "<group>"; };
+		5B5F266F2540B94F005AAC8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B649502250FD922007139DB /* FANDM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FANDM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B649505250FD922007139DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B649507250FD922007139DB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5B649509250FD922007139DB /* StoresVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoresVC.swift; sourceTree = "<group>"; };
 		5B64950C250FD922007139DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		5B64950E250FD924007139DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B649511250FD924007139DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5B649513250FD924007139DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B649518250FD924007139DB /* FANDMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FANDMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +121,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B3CB0FC2540B5AD00D98086 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */,
+				5B32ACB4250FDE5000A8212B /* HomeVC.swift */,
+				5B30FE3B253DEDD4008DA329 /* HomeItem.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		5B3CB0FD2540B5B700D98086 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				5B649509250FD922007139DB /* StoresVC.swift */,
+				5BFE9BB02534CC6B00F996EB /* Store.swift */,
+				5BC4C80225113B18003B0C41 /* OfferCell.swift */,
+				5BC4C80425113B2E003B0C41 /* DefaultStoreCell.swift */,
+				5BC4C7FE25101052003B0C41 /* StoreItemDetailsVC.swift */,
+				5B771A0425210D6000E3E0AA /* FeaturedCell.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		5B3CB0FE2540B5BE00D98086 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				5B771A1625216B7800E3E0AA /* SignUpVC.swift */,
+				5B771A1125216B3700E3E0AA /* LogInVC.swift */,
+				5B771A1E25223E5400E3E0AA /* SurveyVC.swift */,
+				5B32ACB6250FDE6B00A8212B /* AccountVC.swift */,
+				5B30FE4A253E353D008DA329 /* PunchCard.swift */,
+				5B30FE45253E3524008DA329 /* UserData.swift */,
+				5B30FE40253E18A6008DA329 /* AccountInfoVC.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		5B3CB0FF2540B5C400D98086 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				5B32ACB8250FDE8600A8212B /* MapVC.swift */,
+				5BC4C80025113974003B0C41 /* FilterCell.swift */,
+			);
+			path = Maps;
+			sourceTree = "<group>";
+		};
+		5B3CB1002540B65000D98086 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5BC4C7FC2510030C003B0C41 /* Fonts */,
+				5B649505250FD922007139DB /* AppDelegate.swift */,
+				5B649507250FD922007139DB /* SceneDelegate.swift */,
+				5B64950B250FD922007139DB /* Main.storyboard */,
+				5B32ACB2250FDA8700A8212B /* TabBarVC.swift */,
+				5B649510250FD924007139DB /* LaunchScreen.storyboard */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		5B6494F9250FD922007139DB = {
 			isa = PBXGroup;
 			children = (
@@ -146,33 +205,14 @@
 		5B649504250FD922007139DB /* FANDM */ = {
 			isa = PBXGroup;
 			children = (
+				5B3CB1002540B65000D98086 /* Config */,
+				5B3CB0FF2540B5C400D98086 /* Maps */,
+				5B3CB0FE2540B5BE00D98086 /* Account */,
+				5B3CB0FD2540B5B700D98086 /* Stores */,
+				5B3CB0FC2540B5AD00D98086 /* Home */,
+				5B5F266F2540B94F005AAC8B /* Assets.xcassets */,
 				5BFE9B8A2534B87C00F996EB /* GoogleService-Info.plist */,
-				5B649505250FD922007139DB /* AppDelegate.swift */,
-				5B649507250FD922007139DB /* SceneDelegate.swift */,
-				5B649509250FD922007139DB /* StoresVC.swift */,
-				5BFE9BB02534CC6B00F996EB /* Store.swift */,
-				5BC4C80025113974003B0C41 /* FilterCell.swift */,
-				5B64950B250FD922007139DB /* Main.storyboard */,
-				5B771A1625216B7800E3E0AA /* SignUpVC.swift */,
-				5B771A1125216B3700E3E0AA /* LogInVC.swift */,
-				5BC4C80225113B18003B0C41 /* OfferCell.swift */,
-				5BC4C80425113B2E003B0C41 /* DefaultStoreCell.swift */,
-				5BC4C7FE25101052003B0C41 /* StoreItemDetailsVC.swift */,
-				5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */,
-				5B32ACB4250FDE5000A8212B /* HomeVC.swift */,
-				5B32ACB6250FDE6B00A8212B /* AccountVC.swift */,
-				5B771A1E25223E5400E3E0AA /* SurveyVC.swift */,
-				5B32ACB8250FDE8600A8212B /* MapVC.swift */,
-				5B32ACB2250FDA8700A8212B /* TabBarVC.swift */,
-				5B64950E250FD924007139DB /* Assets.xcassets */,
-				5B649510250FD924007139DB /* LaunchScreen.storyboard */,
 				5B649513250FD924007139DB /* Info.plist */,
-				5BC4C7FC2510030C003B0C41 /* Fonts */,
-				5B771A0425210D6000E3E0AA /* FeaturedCell.swift */,
-				5B30FE3B253DEDD4008DA329 /* HomeItem.swift */,
-				5B30FE40253E18A6008DA329 /* AccountInfoVC.swift */,
-				5B30FE45253E3524008DA329 /* UserData.swift */,
-				5B30FE4A253E353D008DA329 /* PunchCard.swift */,
 			);
 			path = FANDM;
 			sourceTree = "<group>";
@@ -319,10 +359,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B649512250FD924007139DB /* LaunchScreen.storyboard in Resources */,
-				5B64950F250FD924007139DB /* Assets.xcassets in Resources */,
 				5BFE9B8B2534B87C00F996EB /* GoogleService-Info.plist in Resources */,
 				5B64950D250FD922007139DB /* Main.storyboard in Resources */,
 				5BC4C7FD2510030D003B0C41 /* Fonts in Resources */,
+				5B5F26702540B94F005AAC8B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,6 +624,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = FANDM/Assets.xcassets;
 				INFOPLIST_FILE = FANDM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -602,6 +643,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = FANDM/Assets.xcassets;
 				INFOPLIST_FILE = FANDM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
