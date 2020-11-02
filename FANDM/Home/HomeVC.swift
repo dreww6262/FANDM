@@ -16,11 +16,11 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let button = UIButton()
-        let titleLabel = UILabel()
-        let descriptionLabel = UILabel()
-        let promoImage = UIImageView()
-        let cell = featuredCollection.dequeueReusableCell(withReuseIdentifier: "featuredCell", for: indexPath)
+        
+        let cell = featuredCollection.dequeueReusableCell(withReuseIdentifier: "featuredCell", for: indexPath) as! FeaturedCell
+        
+        cell.contentView.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height)
+        cell.clipsToBounds = true
         
         cell.contentView.layer.cornerRadius = 8
         cell.contentView.clipsToBounds = true
@@ -32,51 +32,51 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         cell.layer.shadowOpacity = 0.5
         cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.layer.cornerRadius).cgPath
         cell.contentView.backgroundColor = .white
+        cell.homeItem = homeItemList[indexPath.row]
         
-        cell.contentView.addSubview(button)
-        cell.contentView.addSubview(titleLabel)
-        cell.contentView.addSubview(descriptionLabel)
-        cell.contentView.addSubview(promoImage)
         
-        promoImage.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height * 0.55)
+        cell.promoImage.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height * 0.55)
         let url = URL(string: homeItemList[indexPath.row].imageString)
         if (url != nil) {
-            promoImage.sd_setImage(with: url!, completed: { _,err,_,_  in
+            cell.promoImage.sd_setImage(with: url!, completed: { _,err,_,_  in
                 if (err != nil) {
-                    promoImage.image = UIImage(named: "firstandmaindefault")
+                    cell.promoImage.image = UIImage(named: "firstandmaindefault")
                 }
             })
         }
         else {
-            promoImage.image = UIImage(named: "firstandmaindefault")
+            cell.promoImage.image = UIImage(named: "firstandmaindefault")
         }
-        promoImage.contentMode = .scaleAspectFill
+        cell.promoImage.contentMode = .scaleAspectFill
         
-        titleLabel.frame = CGRect(x: 8, y: promoImage.frame.maxY + 16, width: cell.frame.width - 16, height: 16)
-        titleLabel.textAlignment = .left
-        titleLabel.text = homeItemList[indexPath.row].name
-        titleLabel.numberOfLines = 1
-        titleLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        cell.contentView.bringSubviewToFront(titleLabel)
+        cell.titleLabel.frame = CGRect(x: 16, y: cell.promoImage.frame.maxY + 16, width: cell.frame.width - 32, height: 16)
+        cell.titleLabel.textAlignment = .left
+        cell.titleLabel.text = homeItemList[indexPath.row].name
+        cell.titleLabel.numberOfLines = 1
+        cell.titleLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        cell.contentView.bringSubviewToFront(cell.titleLabel)
         
-        descriptionLabel.frame = CGRect(x: 8, y: promoImage.frame.maxY + 36, width: cell.frame.width - 16, height: 14)
-        descriptionLabel.textAlignment = .left
-        descriptionLabel.text = homeItemList[indexPath.row].description
-        descriptionLabel.numberOfLines = 3
-        descriptionLabel.sizeToFit()
-        descriptionLabel.font = UIFont(name: "Poppins-SemiBold", size: 12)
-        descriptionLabel.clipsToBounds = false
-        cell.contentView.bringSubviewToFront(descriptionLabel)
+        cell.descriptionLabel.frame = CGRect(x: 16, y: cell.promoImage.frame.maxY + 36, width: cell.frame.width - 32, height: 14)
+        cell.descriptionLabel.textAlignment = .left
+        cell.descriptionLabel.text = homeItemList[indexPath.row].description
+        cell.descriptionLabel.numberOfLines = 3
+        cell.descriptionLabel.sizeToFit()
+        cell.descriptionLabel.font = UIFont(name: "Poppins", size: 12)
+        cell.descriptionLabel.clipsToBounds = false
+        cell.contentView.bringSubviewToFront(cell.descriptionLabel)
         
-        button.setTitle("See More", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
-        button.frame = CGRect(x: 8, y: descriptionLabel.frame.maxY + 8, width: button.titleLabel!.frame.width + 8, height: 24)
-        button.backgroundColor = UIColor(red: 0.76, green: 0.32, blue: 0.20, alpha: 1.00)
-        button.tintColor = .clear
-        button.layer.cornerRadius = 8
-        button.sizeToFit()
-        button.frame = CGRect(x: 8, y: descriptionLabel.frame.maxY + 8, width: button.frame.width + 8, height: 24)
-        button.clipsToBounds = true
+        cell.button.setTitle("See More", for: .normal)
+        cell.button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        //button.frame = CGRect(x: 16, y: descriptionLabel.frame.maxY + 8, width: button.titleLabel!.frame.width + 8, height: 24)
+        cell.button.backgroundColor = UIColor(red: 0.76, green: 0.32, blue: 0.20, alpha: 1.00)
+        cell.button.tintColor = .clear
+        cell.button.layer.cornerRadius = 8
+        cell.button.sizeToFit()
+        cell.button.frame = CGRect(x: cell.frame.width - cell.button.frame.width - 32, y: cell.descriptionLabel.frame.maxY + 8, width: cell.button.frame.width + 16, height: 32)
+        cell.button.clipsToBounds = true
+        
+        let moreTap = UITapGestureRecognizer(target: self, action: #selector(openDetails))
+        cell.button.addGestureRecognizer(moreTap)
         
         
         return cell
@@ -105,7 +105,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func setUpFeaturedCollection() {
-        featuredCollection.frame = CGRect(x: 8, y: 16, width: view.frame.width - 16, height: view.frame.height - 16)
+        featuredCollection.frame = CGRect(x: (view.frame.width - 350) / 2, y: 16, width: 350, height: view.frame.height - 16)
         featuredCollection.allowsMultipleSelection = false
         featuredCollection.delegate = self
         featuredCollection.dataSource = self
@@ -117,7 +117,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         featuredCollection.clipsToBounds = false
         //featuredCollection.
         
-        let itemSize = featuredCollection.frame.width * 5 / 6
+        let itemSize = 350
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
@@ -144,15 +144,13 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         })
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func openDetails(_ sender: UITapGestureRecognizer) {
+        let detailsVC = NewsItemDetailsVC()
+        let cell = sender.view?.superview?.superview as! FeaturedCell
+        detailsVC.modalPresentationStyle = .fullScreen
+        detailsVC.homeItem = cell.homeItem
+        self.present(detailsVC, animated: false)
     }
-    */
+    
 
 }

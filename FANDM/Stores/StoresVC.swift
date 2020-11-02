@@ -56,6 +56,11 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
     let offersEmpty = UILabel()
     let popularEmpty = UILabel()
         
+    func collectionView(_ collectionView: UICollectionView,
+                    layout collectionViewLayout: UICollectionViewLayout,
+                    sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.height * 1.5, height: collectionView.frame.height)
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
@@ -246,12 +251,15 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
             })
             
             cell.image.frame = CGRect(x: 0, y: 0, width: cell.contentView.frame.width, height: cell.favButton.frame.minY - 5)
-            cell.image.contentMode = .scaleToFill
+            cell.image.contentMode = .scaleAspectFit
             cell.image.clipsToBounds = true
             
             
             cell.contentView.sendSubviewToBack(cell.image)
             cell.contentView.bringSubviewToFront(cell.name)
+            
+            let cellTap = UITapGestureRecognizer(target: self, action: #selector(defaultTap))
+            cell.addGestureRecognizer(cellTap)
             
             return cell
         }
@@ -285,6 +293,10 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         setUpShopsCollection()
         setUpServicesCollection()
         setUpEntertainmentCollection()
+        contentView.bringSubviewToFront(shopsLabel)
+        contentView.bringSubviewToFront(popLabel)
+        contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: entertainmentCollection.frame.maxY + 16)
+        scrollView.contentSize = contentView.bounds.size
         
         setUpEmptyLabels()
         
@@ -355,6 +367,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
                 })
             }
         }
+        self.reloadCollections()
         
         
     }
@@ -403,7 +416,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -411,6 +424,8 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         favCollection.collectionViewLayout = layout
         favCollection.backgroundColor = .white
+        
+        
     }
     
     let offerLabel = UILabel()
@@ -435,7 +450,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -469,7 +484,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -503,7 +518,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -537,7 +552,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -571,7 +586,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -605,7 +620,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: itemSize * 1.5, height: itemSize)
 
         layout.minimumInteritemSpacing = 25
         layout.minimumLineSpacing = 10
@@ -685,6 +700,9 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         
         contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: entertainmentCollection.frame.maxY + 16)
         scrollView.contentSize = contentView.bounds.size
+        
+        contentView.bringSubviewToFront(shopsLabel)
+        contentView.bringSubviewToFront(popLabel)
     }
     
     @objc func handleFavButton(_ sender: UITapGestureRecognizer) {
@@ -692,6 +710,9 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         let store = cell.name.text!
         
         if (userData == nil) {
+            let alert = UIAlertController(title: "Not Signed In", message: "Sign in to mark your favorite stores!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
             return
         }
         else if (userData!.favoriteStores.contains(store)) {
@@ -704,6 +725,18 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         }
         reloadCollections()
         userDataRef?.setData(userData!.dictionary)
+    }
+    
+    @objc func defaultTap (_ sender: UITapGestureRecognizer) {
+        let details = StoreItemDetailsVC()
+        let cell = sender.view as! DefaultStoreCell
+        details.store = cell.store
+        details.userData = userData
+        details.userDataRef = userDataRef
+        details.modalPresentationStyle = .fullScreen
+        
+        self.present(details, animated: false)
+        
     }
     
 }

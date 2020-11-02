@@ -58,6 +58,25 @@ class AccountInfoVC: UIViewController {
         if (Auth.auth().currentUser == nil) {
             dismiss(animated: false, completion: nil)
         }
+        
+        // #407586 -- blue
+        // #C25134 -- orange
+        // #632E3C -- maroon
+        let colors: [UIColor] = [UIColor(red: 0.25, green: 0.46, blue: 0.53, alpha: 1.00), UIColor(red: 0.76, green: 0.32, blue: 0.20, alpha: 1.00), UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)]
+        
+        let positionIndex = self.currentCard?.index ?? 0 // will set with punchcard
+        var count = 0
+        for circle in circles {
+            if (count < positionIndex) {
+                circle.backgroundColor = colors[count % 3]
+            }
+            else {
+                circle.backgroundColor = .lightGray
+            }
+            count += 1
+        }
+        infoBox.backgroundColor = colors[positionIndex % 3]
+        infoLabel.text = "You only have \(6 - positionIndex) visits left to redeem your reward!"
     }
     
     
@@ -71,7 +90,7 @@ class AccountInfoVC: UIViewController {
         navBar?.barTintColor = UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)
         navBar?.isHidden = false
         
-        cardView.frame = CGRect(x: 20, y: 32, width: view.frame.width - 40, height: 0.65 * (view.frame.width - 40))
+        cardView.frame = CGRect(x: 20, y: 16, width: view.frame.width - 40, height: 0.65 * (view.frame.width - 40))
         cardView.layer.cornerRadius = 5
         cardView.clipsToBounds = true
         
@@ -162,6 +181,8 @@ class AccountInfoVC: UIViewController {
         infoLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
         infoLabel.text = "You only have \(6 - positionIndex) visits left to redeem your reward!"
         infoLabel.textColor = .white
+        infoLabel.numberOfLines = 0
+        infoLabel.textAlignment = .center
         
         checkPointIndicator.frame = CGRect(x: circles[positionIndex].frame.minX, y: infoBox.frame.minY - dotSize/2, width: dotSize, height: dotSize)
         checkPointIndicator.layer.cornerRadius = dotSize
