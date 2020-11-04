@@ -212,7 +212,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
             default:
                 print("Error")
-                store = Store(name: "error", description: "error", imageLink: "error", type: "error")
+                store = Store(name: "error", description: "error", imageLink: "error", type: "error", lat: 0.0, long: 0.0, address: "none", phone: "bad", website: "www.google.com")
             }
             
             cell.store = store
@@ -265,6 +265,58 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         }
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if (searchText == "" || searchBar.text == "") {
+            print(searchText)
+            searchVC?.view.removeFromSuperview()
+            searchVC?.removeFromParent()
+            scrollView.isScrollEnabled = true
+            return
+        }
+        else if (searchVC?.parent == nil) {
+            scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.safeAreaInsets.top), animated: false)
+            addChild(searchVC!)
+            view.addSubview(searchVC!.view)
+            let yOffset = searchBar.frame.maxY + 16
+            let height = view.frame.height - yOffset - scrollView.safeAreaInsets.bottom - scrollView.safeAreaInsets.top
+            searchVC!.view.frame = CGRect(x: 0, y: yOffset + scrollView.safeAreaInsets.top, width: scrollView.frame.width, height: height)
+            //searchVC!.view.frame = contentView.convert(CGRect(x: 0, y: yOffset, width: view.frame.width, height: view.frame.height - yOffset - tabBarController!.tabBar.frame.height - 8), to: view.coordinateSpace)
+            scrollView.isScrollEnabled = false
+        }
+        else {
+            scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.safeAreaInsets.top), animated: false)
+        }
+        print("content offset \(scrollView.contentOffset)")
+        print("content insets \(scrollView.safeAreaInsets)")
+        
+        
+        var searchResults = [Store]()
+        for store in unassignedStores {
+            if (store.name.contains(searchText)) {
+                searchResults.append(store)
+            }
+        }
+        searchVC?.storeList = searchResults
+    }
+    
+    var searchVC: SearchResultsVC?
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if (searchVC?.parent != nil) {
+            return
+        }
+        searchVC = storyboard?.instantiateViewController(identifier: "searchVC") as? SearchResultsVC
+        //let yOffset = searchBar.frame.maxY + 16
+        searchVC!.userData = userData
+        searchVC!.userDataRef = userDataRef
+        searchVC!.searchBar = searchBar
+        
+//        addChild(searchVC!)
+//        view.addSubview(searchVC!.view)
+//        searchVC!.view.frame = contentView.convert(CGRect(x: 0, y: yOffset, width: view.frame.width, height: scrollView.frame.height - yOffset), to: view.coordinateSpace)
+//        scrollView.isScrollEnabled = false
+    }
+    
     @objc func offerCellClicked(_ sender: UITapGestureRecognizer) {
         let offerCell = sender.view as! OfferCell
         print("Clicked on offer cell with store \(offerCell.storeNameLabel!.text!)")
@@ -276,16 +328,17 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         
         scrollView.frame = view.frame
         scrollView.isUserInteractionEnabled = true
+        scrollView.delegate = self
         //contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 1500)
         
         setUpNavBar()
         setUpSearchBar()
         
-        filterByLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
-        filterByLabel.sizeToFit()
-        filterByLabel.frame = CGRect(x: 8, y: searchBar.frame.maxY + 16, width: filterByLabel.frame.width, height: filterByLabel.frame.height)
+        //filterByLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        //filterByLabel.sizeToFit()
+        //filterByLabel.frame = CGRect(x: 8, y: searchBar.frame.maxY + 16, width: filterByLabel.frame.width, height: filterByLabel.frame.height)
         
-        setUpFilterButtonCollection()
+        //setUpFilterButtonCollection()
         setUpFavCollection()
         setUpOfferCollection()
         setUpPopularCollection()
@@ -303,7 +356,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: entertainmentCollection.frame.maxY + 16)
         print(contentView.frame.height)
         contentView.isUserInteractionEnabled = true
-        scrollView.contentSize = contentView.frame.size
+        scrollView.contentSize = contentView.bounds.size
         
         db.collection("Stores").addSnapshotListener({ object, error in
             guard let documents = object?.documents else {
@@ -332,6 +385,9 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
                 }
             }
             self.reloadCollections()
+            self.unassignedStores.sort(by: { x, y in
+                return x.name < y.name
+            })
         })
         
     }
@@ -349,8 +405,6 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBar.text = ""
-        searchBar.endEditing(true)
         
         let user = Auth.auth().currentUser
         if (user != nil) {
@@ -385,21 +439,21 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         searchBar.backgroundImage = UIImage()
     }
     
-    func setUpFilterButtonCollection() {
-        filterButtonCollection.frame = CGRect(x: 8, y: filterByLabel.frame.maxY + 8, width: view.frame.width - 16, height: 36)
-        filterButtonCollection.canCancelContentTouches = true
-        filterButtonCollection.allowsMultipleSelection = false
-        filterButtonCollection.showsHorizontalScrollIndicator = false
-        filterButtonCollection.isUserInteractionEnabled = true
-        print("sections in filter collection \(filterButtonCollection.numberOfSections)")
-    }
+//    func setUpFilterButtonCollection() {
+//        filterButtonCollection.frame = CGRect(x: 8, y: filterByLabel.frame.maxY + 8, width: view.frame.width - 16, height: 36)
+//        filterButtonCollection.canCancelContentTouches = true
+//        filterButtonCollection.allowsMultipleSelection = false
+//        filterButtonCollection.showsHorizontalScrollIndicator = false
+//        filterButtonCollection.isUserInteractionEnabled = true
+//        print("sections in filter collection \(filterButtonCollection.numberOfSections)")
+//    }
     
     func setUpFavCollection() {
         let favLabel = UILabel()
         contentView.addSubview(favLabel)
         favLabel.text = "Your Favorites"
         favLabel.font = UIFont(name: "Poppins-SemiBold", size: 16)
-        favLabel.frame = CGRect(x: 8, y: filterButtonCollection.frame.maxY + 20, width: 150, height: 14)
+        favLabel.frame = CGRect(x: 8, y: searchBar.frame.maxY + 16, width: 150, height: 14)
         favLabel.textColor = .black
         favLabel.textAlignment = .left
         
@@ -458,7 +512,6 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
         offerCollection.collectionViewLayout = layout
         offerCollection.backgroundColor = .white
-
     }
     
     let popLabel = UILabel()
@@ -739,5 +792,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.endEditing(true)
+    }
 }
-

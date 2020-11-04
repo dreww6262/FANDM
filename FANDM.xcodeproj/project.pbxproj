@@ -17,6 +17,7 @@
 		5B32ACB9250FDE8600A8212B /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACB8250FDE8600A8212B /* MapVC.swift */; };
 		5B32ACBB250FF8F600A8212B /* NewsItemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */; };
 		5B399C3D254F848E00488E00 /* MapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B399C3C254F848E00488E00 /* MapStyle.json */; };
+		5B399C422550AB4A00488E00 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B399C412550AB4A00488E00 /* SearchResultsVC.swift */; };
 		5B5F26702540B94F005AAC8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B5F266F2540B94F005AAC8B /* Assets.xcassets */; };
 		5B649506250FD922007139DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649505250FD922007139DB /* AppDelegate.swift */; };
 		5B649508250FD922007139DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649507250FD922007139DB /* SceneDelegate.swift */; };
@@ -67,6 +68,7 @@
 		5B32ACB8250FDE8600A8212B /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemDetailsVC.swift; sourceTree = "<group>"; };
 		5B399C3C254F848E00488E00 /* MapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MapStyle.json; sourceTree = "<group>"; };
+		5B399C412550AB4A00488E00 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
 		5B4896642547337D000E907F /* FANDMRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FANDMRelease.entitlements; sourceTree = "<group>"; };
 		5B5F266F2540B94F005AAC8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B649502250FD922007139DB /* FANDM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FANDM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +145,7 @@
 				5BC4C80225113B18003B0C41 /* OfferCell.swift */,
 				5BC4C80425113B2E003B0C41 /* DefaultStoreCell.swift */,
 				5BC4C7FE25101052003B0C41 /* StoreItemDetailsVC.swift */,
+				5B399C412550AB4A00488E00 /* SearchResultsVC.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				5BC4C7FF25101052003B0C41 /* StoreItemDetailsVC.swift in Sources */,
 				5BFE9BB12534CC6B00F996EB /* Store.swift in Sources */,
 				5B32ACBB250FF8F600A8212B /* NewsItemDetailsVC.swift in Sources */,
+				5B399C422550AB4A00488E00 /* SearchResultsVC.swift in Sources */,
 				5B32ACB3250FDA8700A8212B /* TabBarVC.swift in Sources */,
 				5B30FE3C253DEDD4008DA329 /* HomeItem.swift in Sources */,
 				5B30FE4B253E353D008DA329 /* PunchCard.swift in Sources */,

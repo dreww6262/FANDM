@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 import Firebase
 
 class StoreItemDetailsVC: UIViewController {
@@ -126,16 +127,36 @@ class StoreItemDetailsVC: UIViewController {
     @objc func openInSafari(_ sender: UITapGestureRecognizer) {
         //code is legit... just need to refactor backend
         
-//        let url = URL(string: store!.website)
-//        if (url != nil) {
-//            UIApplication.shared.open(url!)
-//        }
-//        else {
-//            let alert = UIAlertController(title: "Unable to open link", message: "Try again or come back later", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-//            self.present(alert, animated: false)
-//        }
+        let url = URL(string: store!.website)
+        if (url != nil) {
+            UIApplication.shared.open(url!)
+        }
+        else {
+            let alert = UIAlertController(title: "Unable to open link", message: "Try again or come back later", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: false)
+        }
         
+    }
+    
+    @objc func makePhoneCall(_ sender: UITapGestureRecognizer) {
+        if let url = URL(string: "tel://\(store!.phone)") {
+             UIApplication.shared.open(url)
+         }
+        else {
+            let alert = UIAlertController(title: "Unable to make phone call", message: "Try again or come back later", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: false)
+        }
+    }
+    
+    @objc func giveDirections(_ sender: UITapGestureRecognizer) {
+        let coordinates = CLLocationCoordinate2DMake(store!.lat, store!.long)
+        let placemark = MKPlacemark(coordinate: coordinates)
+        let mapItem = MKMapItem(placemark: placemark)
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeTransit]
+        mapItem.name = store!.name
+        mapItem.openInMaps(launchOptions: launchOptions)
     }
     
     @objc func handleFavButton(_ sender: UITapGestureRecognizer) {
@@ -196,6 +217,15 @@ class StoreItemDetailsVC: UIViewController {
         phoneButton.clipsToBounds = true
         directionsButton.layer.cornerRadius = 5
         directionsButton.clipsToBounds = true
+        
+        let websiteTap = UITapGestureRecognizer(target: self, action: #selector(openInSafari))
+        websiteButton.addGestureRecognizer(websiteTap)
+        
+        let phoneTap = UITapGestureRecognizer(target: self, action: #selector(makePhoneCall))
+        phoneButton.addGestureRecognizer(phoneTap)
+        
+        let directionsTap = UITapGestureRecognizer(target: self, action: #selector(giveDirections))
+        directionsButton.addGestureRecognizer(directionsTap)
     }
 
 }
