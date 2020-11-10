@@ -121,6 +121,22 @@
             </objects>
             <point key="canvasLocation" x="3194" y="35"/>
         </scene>
+        <!--SettingsVC-->
+        <scene sceneID="U8L-gB-V9Z">
+            <objects>
+                <viewController storyboardIdentifier="settingsVC" id="Dzm-YK-hXP" customClass="SettingsVC" customModule="FANDM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6aR-b5-bLT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="SuB-e1-pDY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="VZe-46-pWY"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wIl-cE-IKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4290" y="35"/>
+        </scene>
         <!--Search ResultsVC-->
         <scene sceneID="cju-Nx-yk3">
             <objects>
@@ -614,7 +630,13 @@
                         <viewLayoutGuide key="safeArea" id="rRG-gy-gj4"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Your Account" id="5UO-Rs-iPW"/>
+                    <navigationItem key="navigationItem" title="Your Account" id="5UO-Rs-iPW">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="settings" id="iSV-TG-wqh">
+                            <connections>
+                                <action selector="settingsAction:" destination="Syk-l2-AuE" id="tN0-gt-XNf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HI9-Fw-Is4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -691,6 +713,11 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1ze-da-UxC">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -751,6 +778,7 @@
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="location.circle" catalog="system" width="128" height="121"/>
         <image name="person" catalog="system" width="128" height="117"/>
+        <image name="settings" width="32" height="32"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

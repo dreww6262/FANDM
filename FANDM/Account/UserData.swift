@@ -14,17 +14,19 @@ class UserData {
     var username: String
     var email: String
     var favoriteStores: [String]
+    var docID: String
     
     var dictionary: [String: Any] {
-        return ["firstName": firstName, "lastName": lastName, "username": username, "email": email, "favoriteStores": favoriteStores]
+        return ["firstName": firstName, "lastName": lastName, "username": username, "email": email, "favoriteStores": favoriteStores, "docID": docID]
     }
     
-    init(firstName: String, lastName: String, username: String, email: String, favoriteStores: [String]) {
+    init(firstName: String, lastName: String, username: String, email: String, favoriteStores: [String], docID: String) {
         self.firstName = firstName
         self.lastName = lastName
         self.username = username
         self.email = email
         self.favoriteStores = favoriteStores
+        self.docID = docID
     }
     
     convenience init(dictionary: [String: Any]) {
@@ -33,8 +35,9 @@ class UserData {
         let username = dictionary["username"] as! String? ?? ""
         let email = dictionary["email"] as! String? ?? ""
         let favoriteStores = dictionary["favoriteStores"] as! [String]? ?? [String]()
+        let docID = dictionary["docID"] as! String? ?? ""
         
-        self.init(firstName: firstName, lastName: lastName, username: username, email: email, favoriteStores: favoriteStores)
+        self.init(firstName: firstName, lastName: lastName, username: username, email: email, favoriteStores: favoriteStores, docID: docID)
     }
     
 }

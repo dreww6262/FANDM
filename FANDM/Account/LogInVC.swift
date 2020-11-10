@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class LogInVC: UIViewController {
+class LogInVC: UIViewController, UITextFieldDelegate {
     
     let usernameInput = UITextField()
     let pswdInput = UITextField()
@@ -44,15 +44,17 @@ class LogInVC: UIViewController {
         pswdInput.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         pswdInput.isSecureTextEntry = true
         
+        pswdInput.delegate = self
+        usernameInput.delegate = self
+        
         let forgotPswdButton = UIButton()
         view.addSubview(forgotPswdButton)
         forgotPswdButton.setTitle("Forgot Password?", for: .normal)
         forgotPswdButton.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
-        let forgotTap = UITapGestureRecognizer(target: self, action: #selector(forgotPressed))
-        forgotPswdButton.addGestureRecognizer(forgotTap)
         forgotPswdButton.setTitleColor(.white, for: .normal)
         forgotPswdButton.sizeToFit()
         forgotPswdButton.frame = CGRect(x: pswdInput.frame.minX, y: pswdInput.frame.maxY + 8, width: forgotPswdButton.frame.width, height: forgotPswdButton.frame.height)
+        forgotPswdButton.addTarget(self, action: #selector(forgotTapped), for: .touchUpInside)
         
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: 0.0, y: 22, width: usernameInput.frame.width, height: 1.0)
@@ -93,6 +95,15 @@ class LogInVC: UIViewController {
         logInButton.addGestureRecognizer(logInTap)
         
         // Do any additional setup after loading the view.
+    }
+    
+    @objc func forgotTapped(_sender: UITapGestureRecognizer) {
+        let alert = UIAlertController(title: "Is your email inputted correctly?", message: "Make sure your email is inputted in this screen.  Click \"Continue\" to send password reset to your email or click \"Back\" and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Continue", style: .default, handler: { _ in
+            Auth.auth().sendPasswordReset(withEmail: self.usernameInput.text!, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Back", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
 
@@ -136,9 +147,6 @@ class LogInVC: UIViewController {
         })
     }
     
-    @objc func forgotPressed(_ sender: UITapGestureRecognizer) {
-        // TODO: implement forgot password
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        let accountVC = segue.destination as! AccountVC
@@ -149,6 +157,11 @@ class LogInVC: UIViewController {
     func clearInputs() {
         usernameInput.text = ""
         pswdInput.text = ""
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     /*
     // MARK: - Navigation

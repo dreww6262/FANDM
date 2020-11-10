@@ -18,6 +18,8 @@
 		5B32ACBB250FF8F600A8212B /* NewsItemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */; };
 		5B399C3D254F848E00488E00 /* MapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B399C3C254F848E00488E00 /* MapStyle.json */; };
 		5B399C422550AB4A00488E00 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B399C412550AB4A00488E00 /* SearchResultsVC.swift */; };
+		5B40C39625590ABF00BE6F8F /* RecordVisitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B40C39525590ABF00BE6F8F /* RecordVisitVC.swift */; };
+		5B40C39B255A4EBB00BE6F8F /* RedeemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B40C39A255A4EBB00BE6F8F /* RedeemVC.swift */; };
 		5B5F26702540B94F005AAC8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B5F266F2540B94F005AAC8B /* Assets.xcassets */; };
 		5B632CD125534F5B0091DCED /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B632CD025534F5B0091DCED /* SettingsVC.swift */; };
 		5B649506250FD922007139DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B649505250FD922007139DB /* AppDelegate.swift */; };
@@ -36,6 +38,7 @@
 		5BC4C80125113974003B0C41 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC4C80025113974003B0C41 /* FilterCell.swift */; };
 		5BC4C80325113B18003B0C41 /* OfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC4C80225113B18003B0C41 /* OfferCell.swift */; };
 		5BC4C80525113B2E003B0C41 /* DefaultStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC4C80425113B2E003B0C41 /* DefaultStoreCell.swift */; };
+		5BC74D522558BD23009E12D2 /* ChangeInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC74D512558BD23009E12D2 /* ChangeInfoVC.swift */; };
 		5BFE9B8B2534B87C00F996EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BFE9B8A2534B87C00F996EB /* GoogleService-Info.plist */; };
 		5BFE9BB12534CC6B00F996EB /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFE9BB02534CC6B00F996EB /* Store.swift */; };
 		99F98E8DE754171F58F3903B /* Pods_FANDM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9703DB5C7EAEA792523FE36D /* Pods_FANDM.framework */; };
@@ -70,6 +73,8 @@
 		5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemDetailsVC.swift; sourceTree = "<group>"; };
 		5B399C3C254F848E00488E00 /* MapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MapStyle.json; sourceTree = "<group>"; };
 		5B399C412550AB4A00488E00 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
+		5B40C39525590ABF00BE6F8F /* RecordVisitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVisitVC.swift; sourceTree = "<group>"; };
+		5B40C39A255A4EBB00BE6F8F /* RedeemVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemVC.swift; sourceTree = "<group>"; };
 		5B4896642547337D000E907F /* FANDMRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FANDMRelease.entitlements; sourceTree = "<group>"; };
 		5B5F266F2540B94F005AAC8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B632CD025534F5B0091DCED /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -95,6 +100,7 @@
 		5BC4C80025113974003B0C41 /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		5BC4C80225113B18003B0C41 /* OfferCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferCell.swift; sourceTree = "<group>"; };
 		5BC4C80425113B2E003B0C41 /* DefaultStoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultStoreCell.swift; sourceTree = "<group>"; };
+		5BC74D512558BD23009E12D2 /* ChangeInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeInfoVC.swift; sourceTree = "<group>"; };
 		5BFE9B8A2534B87C00F996EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5BFE9BB02534CC6B00F996EB /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		9703DB5C7EAEA792523FE36D /* Pods_FANDM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FANDM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +169,9 @@
 				5B30FE45253E3524008DA329 /* UserData.swift */,
 				5B30FE40253E18A6008DA329 /* AccountInfoVC.swift */,
 				5B632CD025534F5B0091DCED /* SettingsVC.swift */,
+				5BC74D512558BD23009E12D2 /* ChangeInfoVC.swift */,
+				5B40C39525590ABF00BE6F8F /* RecordVisitVC.swift */,
+				5B40C39A255A4EBB00BE6F8F /* RedeemVC.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -329,7 +338,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1170;
-				LastUpgradeCheck = 1170;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = "Andrew Williamson";
 				TargetAttributes = {
 					5B649501250FD922007139DB = {
@@ -459,7 +468,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BC74D522558BD23009E12D2 /* ChangeInfoVC.swift in Sources */,
 				5B771A1F25223E5400E3E0AA /* SurveyVC.swift in Sources */,
+				5B40C39625590ABF00BE6F8F /* RecordVisitVC.swift in Sources */,
 				5B64950A250FD922007139DB /* StoresVC.swift in Sources */,
 				5BC4C80325113B18003B0C41 /* OfferCell.swift in Sources */,
 				5B32ACB5250FDE5000A8212B /* HomeVC.swift in Sources */,
@@ -477,6 +488,7 @@
 				5B30FE3C253DEDD4008DA329 /* HomeItem.swift in Sources */,
 				5B30FE4B253E353D008DA329 /* PunchCard.swift in Sources */,
 				5B649508250FD922007139DB /* SceneDelegate.swift in Sources */,
+				5B40C39B255A4EBB00BE6F8F /* RedeemVC.swift in Sources */,
 				5BC4C80125113974003B0C41 /* FilterCell.swift in Sources */,
 				5B771A1725216B7800E3E0AA /* SignUpVC.swift in Sources */,
 				5B632CD125534F5B0091DCED /* SettingsVC.swift in Sources */,
@@ -562,6 +574,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -586,7 +599,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -622,6 +635,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -640,7 +654,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -657,6 +671,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = FANDM/Assets.xcassets;
+				DEVELOPMENT_TEAM = J6R4DB363R;
 				INFOPLIST_FILE = FANDM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -675,9 +690,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FANDM/FANDMRelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = FANDM/Assets.xcassets;
-				DEVELOPMENT_TEAM = ZG9F2XP44H;
+				DEVELOPMENT_TEAM = J6R4DB363R;
 				INFOPLIST_FILE = FANDM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,6 +701,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.PRISM.FANDM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

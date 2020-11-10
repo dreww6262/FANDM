@@ -145,7 +145,9 @@ class SurveyVC: UIViewController {
     }
     
     func clearInputs() {
-        
+        dobTextField.text = ""
+        studentTextField.text = ""
+        frequencyTextField.text = ""
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

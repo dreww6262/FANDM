@@ -52,6 +52,8 @@ class AccountInfoVC: UIViewController {
         cardView.image = UIImage(named: "card")
         
         view.backgroundColor = .white
+        
+            
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,13 +79,14 @@ class AccountInfoVC: UIViewController {
         }
         infoBox.backgroundColor = colors[positionIndex % 3]
         infoLabel.text = "You only have \(6 - positionIndex) visits left to redeem your reward!"
+        setup()
     }
     
     
     
     func setup() {
+        navigationController?.navigationBar.tintColor = .white
         let navBar = navigationController?.navigationBar
-        navBar?.barTintColor = UIColor.white
         navBar?.isTranslucent = false
         navBar?.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont(name: "Poppins-SemiBold", size: 32) as Any]
         navBar?.shadowImage = UIImage()
@@ -123,13 +126,14 @@ class AccountInfoVC: UIViewController {
                 }
                 for doc in docs {
                     let newPunch = PunchCard(dictionary: doc.data())
-                    if newPunch.dateRedeemed != nil {
+                    if newPunch.dateRedeemed == nil {
                         self.currentCard = newPunch
                     }
                 }
                 if self.currentCard == nil {
-                    self.currentCard = PunchCard(username: self.userData!.username, index: 0, dateCreated: Date(), dateRedeemed: nil)
-                    self.db.collection("PunchCard").document().setData(self.currentCard!.dictionary)
+                    let doc = self.db.collection("PunchCard").document()
+                    self.currentCard = PunchCard(username: self.userData!.username, index: 0, dateCreated: Date(), dateRedeemed: nil, docID: doc.documentID)
+                    doc.setData(self.currentCard!.dictionary)
                 }
                 self.populateData()
             })
@@ -179,12 +183,19 @@ class AccountInfoVC: UIViewController {
         
         infoLabel.frame = CGRect(x: 10, y: 10, width: infoBox.frame.width - 20, height: infoBox.frame.height - 20)
         infoLabel.font = UIFont(name: "Poppins-SemiBold", size: 14)
-        infoLabel.text = "You only have \(6 - positionIndex) visits left to redeem your reward!"
+        
         infoLabel.textColor = .white
         infoLabel.numberOfLines = 0
         infoLabel.textAlignment = .center
         
-        checkPointIndicator.frame = CGRect(x: circles[positionIndex].frame.minX, y: infoBox.frame.minY - dotSize/2, width: dotSize, height: dotSize)
+        if positionIndex < numChunks + 1 {
+            infoLabel.text = "You only have \(6 - positionIndex) visits left to redeem your reward!"
+            checkPointIndicator.frame = CGRect(x: circles[positionIndex].frame.minX, y: infoBox.frame.minY - dotSize/2, width: dotSize, height: dotSize)
+        }
+        else {
+            infoLabel.text = "Redeem your reward now by tapping the \"Redeem Reward\" button below!"
+            checkPointIndicator.isHidden = true
+        }
         checkPointIndicator.layer.cornerRadius = dotSize
         checkPointIndicator.backgroundColor = colors[positionIndex % 3]
         
@@ -198,9 +209,11 @@ class AccountInfoVC: UIViewController {
         recordVisitButton.layer.cornerRadius = 22
         recordVisitButton.clipsToBounds = true
         recordVisitButton.isUserInteractionEnabled = true
+        recordVisitButton.addTarget(self, action: #selector(recordPressed), for: .touchUpInside)
         
         redeemButton.setTitle("Redeem Reward", for: .normal)
         redeemButton.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 18)
+        redeemButton.addTarget(self, action: #selector(redeemPressed), for: .touchUpInside)
         
         if (positionIndex >= 6) {
             redeemButton.backgroundColor = UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)
@@ -210,11 +223,37 @@ class AccountInfoVC: UIViewController {
         else {
             redeemButton.backgroundColor = .lightGray
             redeemButton.setTitleColor(.black, for: .normal)
-            redeemButton.isUserInteractionEnabled = false
+            redeemButton.isUserInteractionEnabled = true
         }
         redeemButton.frame = CGRect(x: (view.frame.width - 280) / 2, y: recordVisitButton.frame.maxY + 18, width: 280, height: 45)
         redeemButton.layer.cornerRadius = 22
         redeemButton.clipsToBounds = true
         redeemButton.isUserInteractionEnabled = true
+    }
+    
+    @objc func redeemPressed(_ sender: UITapGestureRecognizer) {
+        let redeemVC = RedeemVC()
+        redeemVC.punchCard = currentCard
+        self.show(redeemVC, sender: self)
+    }
+    
+    @objc func recordPressed(_ sender: UITapGestureRecognizer) {
+        if currentCard!.index > 5 {
+            let alert = UIAlertController(title: "Redeem your reward before recording a new visit.", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        else {
+            let recordVC = RecordVisitVC()
+            recordVC.punchCard = currentCard
+            show(recordVC, sender: self)
+        }
+    }
+    
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = "Something Else"
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
     }
 }

@@ -15,16 +15,18 @@ class PunchCard {
     var index: Int
     var dateCreated: Date
     var dateRedeemed: Date?
+    var docID: String
     
     var dictionary: [String: Any] {
-        return ["username": username, "index": index, "dateCreated": dateCreated, "dateRedeemed": dateRedeemed ?? ""]
+        return ["username": username, "index": index, "dateCreated": dateCreated, "dateRedeemed": dateRedeemed ?? "", "docID": docID]
     }
     
-    init (username: String, index: Int, dateCreated: Date, dateRedeemed: Date?) {
+    init (username: String, index: Int, dateCreated: Date, dateRedeemed: Date?, docID: String) {
         self.username = username
         self.index = index
         self.dateCreated = dateCreated
         self.dateRedeemed = dateRedeemed
+        self.docID = docID
     }
     
     convenience init(dictionary: [String: Any]) {
@@ -36,9 +38,10 @@ class PunchCard {
         if redeemedTimestamp is Timestamp {
             dateRedeemed = (redeemedTimestamp as! Timestamp).dateValue()
         }
+        let docID = dictionary["docID"] as! String? ?? ""
         
         
-        self.init(username: username, index: index, dateCreated: dateCreated, dateRedeemed: dateRedeemed)
+        self.init(username: username, index: index, dateCreated: dateCreated, dateRedeemed: dateRedeemed, docID: docID)
     }
     
 }

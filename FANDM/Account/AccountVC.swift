@@ -12,24 +12,16 @@ import Firebase
 
 class AccountVC: UIViewController {
     
-    //var user: User?
-    //var userData: UserData?
-    
     var infoChild: AccountInfoVC?
     var infoView: UIView?
     var userData: UserData?
+    
+    let settingsButton = UIButton()
+    
+    let db = Firestore.firestore()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let navBar = navigationController?.navigationBar
-        navBar?.barTintColor = UIColor.white
-        navBar?.isTranslucent = false
-        navBar?.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont(name: "Poppins-SemiBold", size: 32) as Any]
-        navBar?.shadowImage = UIImage()
-        navBar?.barTintColor = UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)
-        navBar?.isHidden = true
-        
         
         view.backgroundColor = UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)
     
@@ -38,6 +30,13 @@ class AccountVC: UIViewController {
         logoPic.frame = CGRect(x: view.frame.midX - 80, y: 60, width: 160, height: 85)
         logoPic.image = UIImage(named: "Logo")
         logoPic.contentMode = .scaleAspectFit
+        
+        view.addSubview(settingsButton)
+        settingsButton.setImage(UIImage(named: "settings"), for: .normal)
+        settingsButton.frame = CGRect(x: 32, y: logoPic.frame.midY - 24, width: 32, height: 32)
+        settingsButton.backgroundColor = .clear
+        settingsButton.tintColor = .clear
+        settingsButton.addTarget(self, action: #selector(settingsButtonTapped), for: .touchUpInside)
         
         let smallText = UILabel()
         view.addSubview(smallText)
@@ -99,11 +98,29 @@ class AccountVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        let email = Auth.auth().currentUser?.email ?? ""
+
+        if (email != "") {
+            db.collection("UserData").whereField("email", isEqualTo: email).getDocuments(completion: {obj, error in
+                guard let docs = obj?.documents else {
+                    return
+                }
+                if docs.count > 0 {
+                    self.userData = UserData(dictionary: docs[0].data())
+                }
+            })
+        }
+        
+        navigationController?.navigationBar.tintColor = .black
+        let navBar = navigationController?.navigationBar
+        navBar?.isTranslucent = false
+        navBar?.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont(name: "Poppins-SemiBold", size: 32) as Any]
+        navBar?.barTintColor = UIColor(red: 0.39, green: 0.18, blue: 0.24, alpha: 1.00)
+        navBar?.isHidden = true
+        
         if Auth.auth().currentUser != nil {
-            // present account information
-//            let alert = UIAlertController(title: "already signed in", message: "dingus", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "True", style: .default, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
+            
             
             if (infoChild == nil || infoView == nil){
                 infoView?.removeFromSuperview()
@@ -114,6 +131,7 @@ class AccountVC: UIViewController {
                 view.addSubview(infoView!)
                 infoView?.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - ((tabBarController?.tabBar.frame.height) ?? 0))
                 infoChild!.setup()
+                settingsButton.isHidden = true
             }
             
             // Alert made above.  actually use this to transition to account info
@@ -121,6 +139,9 @@ class AccountVC: UIViewController {
         else {
             infoView?.removeFromSuperview()
             infoChild?.removeFromParent()
+            infoView = nil
+            infoChild = nil
+            settingsButton.isHidden = false
         }
     }
     
@@ -146,18 +167,61 @@ class AccountVC: UIViewController {
         }
     }
     
-    
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func settingsAction(_ sender: Any) {
+        let settingsVC = storyboard?.instantiateViewController(identifier: "settingsVC") as! SettingsVC
+        let email = Auth.auth().currentUser?.email ?? ""
+        if userData != nil {
+            settingsVC.userData = userData
+            settingsVC.modalPresentationStyle = .fullScreen
+            self.show(settingsVC, sender: self)
+        }
+        else if (email != "") {
+            db.collection("UserData").whereField("email", isEqualTo: email).getDocuments(completion: {obj, error in
+                guard let docs = obj?.documents else {
+                    return
+                }
+                if docs.count > 0 {
+                    self.userData = UserData(dictionary: docs[0].data())
+                }
+                settingsVC.userData = self.userData
+                settingsVC.modalPresentationStyle = .fullScreen
+                self.show(settingsVC, sender: self)
+            })
+        }
+        else {
+            settingsVC.modalPresentationStyle = .fullScreen
+            self.show(settingsVC, sender: self)
+        }
     }
-    */
+    
+    // for button when not signed in
+    @objc func settingsButtonTapped(_ sender: UITapGestureRecognizer) {
+        let settingsVC = storyboard?.instantiateViewController(identifier: "settingsVC") as! SettingsVC
+        
+        let email = Auth.auth().currentUser?.email ?? ""
+        
+        if userData != nil {
+            settingsVC.userData = userData
+            settingsVC.modalPresentationStyle = .fullScreen
+            self.show(settingsVC, sender: self)
+        }
+        else if (email != "") {
+            db.collection("UserData").whereField("email", isEqualTo: email).getDocuments(completion: {obj, error in
+                guard let docs = obj?.documents else {
+                    return
+                }
+                if docs.count > 0 {
+                    self.userData = UserData(dictionary: docs[0].data())
+                }
+                settingsVC.userData = self.userData
+                settingsVC.modalPresentationStyle = .fullScreen
+                self.show(settingsVC, sender: self)
+            })
+        }
+        else {
+            settingsVC.modalPresentationStyle = .fullScreen
+            self.show(settingsVC, sender: self)
+        }
+    }
 
 }

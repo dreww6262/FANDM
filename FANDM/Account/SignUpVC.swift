@@ -134,40 +134,57 @@ class SignUpVC: UIViewController {
             return
         }
         
-        let auth = Auth.auth()
-        auth.createUser(withEmail: emailInput.text!, password: passwordInput.text!, completion: { result, error in
-            if (error != nil) {
-                let alert = UIAlertController(title: "Email has already been used.  Please try again with another email.", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                self.present(alert, animated: true)
-                return
-            }
-            let user = result?.user.createProfileChangeRequest()
-            user?.displayName = self.firstNameInput.text! + " " + self.lastNameInput.text!
-            user?.commitChanges(completion: { error in
-                
-                if error != nil {
-                    let alert = UIAlertController(title: "An unknown error occurred.  Please try again.", message: "", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                    auth.currentUser?.delete(completion: nil)
-                }
-                
-                let userData = UserData(firstName: self.firstNameInput.text!, lastName: self.lastNameInput.text!, username: self.usernameInput.text!.lowercased(), email: self.emailInput.text!.lowercased(), favoriteStores: [String]())
-                self.userData = userData
-                self.db.collection("UserData").document().setData(userData.dictionary) { error in
-                    if error == nil {
-                        self.clearInputs()
-                        self.openSurveyVC()
-                    }
-                    else {
-                        let alert = UIAlertController(title: "An unknown error occurred.  Please try again.", message: "", preferredStyle: .alert)
+        checkUsername(completion: { good in
+            if (good) {
+                let auth = Auth.auth()
+                auth.createUser(withEmail: self.emailInput.text!, password: self.passwordInput.text!, completion: { result, error in
+                    if (error != nil) {
+                        let alert = UIAlertController(title: "Email has already been used.  Please try again with another email.", message: "", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
                         self.present(alert, animated: true)
-                        auth.currentUser?.delete(completion: nil)
+                        return
                     }
-                }
-            })
+                    let user = result?.user.createProfileChangeRequest()
+                    user?.displayName = self.firstNameInput.text! + " " + self.lastNameInput.text!
+                    user?.commitChanges(completion: { error in
+                        
+                        if error != nil {
+                            let alert = UIAlertController(title: "An unknown error occurred.  Please try again.", message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                            self.present(alert, animated: true)
+                            auth.currentUser?.delete(completion: nil)
+                        }
+                        
+                        let userData = UserData(firstName: self.firstNameInput.text!, lastName: self.lastNameInput.text!, username: self.usernameInput.text!.lowercased(), email: self.emailInput.text!.lowercased(), favoriteStores: [String](), docID: "To be set later")
+                        let docRef = self.db.collection("UserData").document()
+                        userData.docID = docRef.documentID
+                        self.userData = userData
+                        docRef.setData(userData.dictionary) { error in
+                            if error == nil {
+                                self.clearInputs()
+                                self.openSurveyVC()
+                            }
+                            else {
+                                let alert = UIAlertController(title: "An unknown error occurred.  Please try again.", message: "", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                                self.present(alert, animated: true)
+                                auth.currentUser?.delete(completion: nil)
+                            }
+                        }
+                    })
+                })
+            }
+            else {
+                let alert = UIAlertController(title: "Username has been taken already", message: "Please choose a new username", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        })
+    }
+    
+    func checkUsername(completion: @escaping (Bool) -> ()) {
+        db.collection("UserData").whereField("username", isEqualTo: usernameInput.text!.lowercased()).getDocuments(completion: { obj, error in
+            completion(!(obj?.documents.count ?? 0 > 0))
         })
     }
     
