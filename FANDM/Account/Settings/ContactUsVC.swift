@@ -25,7 +25,8 @@ class ContactUsVC: UIViewController {
         
         view.backgroundColor = .white
         
-        let adjustment = 22.5 + (navBar?.frame.height ?? 0) + (tabBarController?.tabBar.frame.height ?? 0) / 2
+        var adjustment = 22.5 + (navBar?.frame.height ?? 0)
+        adjustment += (tabBarController?.tabBar.frame.height ?? 0) / 2
         
         let fandmButton = UIButton()
         view.addSubview(fandmButton)
