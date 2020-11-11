@@ -77,7 +77,7 @@ class RedeemVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
         redeemButton.layer.borderColor = UIColor.white.cgColor
         redeemButton.clipsToBounds = true
         redeemButton.layer.cornerRadius = 22
-        
+        redeemButton.addTarget(self, action: #selector(redeemPressed), for: .touchUpInside)
         
     }
     
@@ -93,7 +93,7 @@ class RedeemVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
             db.collection("Redemptions").document().setData(["username": punchCard!.username, "dateRedeemed": dateRedeemed, "offer": redeemableList[selectedRow], "email": Auth.auth().currentUser?.email ?? "no email, check UserData", "punchCardID": punchCard!.docID])
             punchCard?.dateRedeemed = dateRedeemed
             db.collection("PunchCard").document(punchCard!.docID).setData(punchCard!.dictionary) { _ in
-                self.dismiss(animated: false, completion: nil)
+                self.navigationController?.popViewController(animated: false)
             }
         }
     }

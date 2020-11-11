@@ -191,9 +191,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
                 store = favList[indexPath.row]
             case popularCollection:
                 type = "popular"
-                store = unassignedStores.first(where: {s in
-                    return true
-                })
+                store = popularList[indexPath.row]
             case restaurantCollection:
                 type = "restaurant"
                 store = restaurantList[indexPath.row]
@@ -212,7 +210,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
 
             default:
                 print("Error")
-                store = Store(name: "error", description: "error", imageLink: "error", type: "error", lat: 0.0, long: 0.0, address: "none", phone: "bad", website: "www.google.com")
+                store = Store(name: "error", description: "error", imageLink: "error", type: "error", lat: 0.0, long: 0.0, address: "none", phone: "bad", website: "www.google.com", views: 0)
             }
             
             cell.store = store
@@ -228,7 +226,9 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
             cell.favButton.backgroundColor = .clear
             cell.favButton.tintColor = .clear
             cell.favButton.setTitle("", for: .normal)
-            if (userData != nil && userData!.favoriteStores.contains(store!.name)) {
+            if (userData != nil && userData!.favoriteStores.contains(store!.name) && !favList.contains(where: {s in
+                s.name == store?.name
+            })) {
                 cell.favButton.setImage(UIImage(named: "curvedfilled"), for: .normal)
                 favList.append(store!)
             }
@@ -358,7 +358,7 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
         contentView.isUserInteractionEnabled = true
         scrollView.contentSize = contentView.bounds.size
         
-        db.collection("Stores").addSnapshotListener({ object, error in
+        db.collection("Stores").getDocuments(completion: { object, error in
             guard let documents = object?.documents else {
                 return
             }
@@ -367,6 +367,8 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
             self.restaurantList.removeAll(keepingCapacity: true)
             self.servicesList.removeAll(keepingCapacity: true)
             self.entertainmentList.removeAll(keepingCapacity: true)
+            
+            self.popularList.removeAll(keepingCapacity: true)
             
             for doc in documents {
                 let store = Store(dictionary: doc.data())
@@ -382,6 +384,24 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
                     self.entertainmentList.append(store)
                 default:
                     print("did not get correct type")
+                }
+                if (self.popularList.count < 5) {
+                    self.popularList.append(store)
+                }
+                else {
+                    self.popularList.sort(by: {x, y in
+                        x.views < y.views
+                    })
+                    var count = 0
+                    for pop in self.popularList {
+                        print("popviews: \(pop.views)")
+                        if (pop.views < store.views) {
+                            self.popularList.remove(at: count)
+                            self.popularList.append(store)
+                            break
+                        }
+                        count += 1
+                    }
                 }
             }
             self.reloadCollections()
@@ -793,6 +813,9 @@ class StoresVC: UIViewController, UICollectionViewDataSource, UICollectionViewDe
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.endEditing(true)
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
 }

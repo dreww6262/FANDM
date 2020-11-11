@@ -78,7 +78,6 @@ class AccountInfoVC: UIViewController {
             count += 1
         }
         infoBox.backgroundColor = colors[positionIndex % 3]
-        infoLabel.text = "You only have \(6 - positionIndex) visits left to redeem your reward!"
         setup()
     }
     
@@ -124,6 +123,7 @@ class AccountInfoVC: UIViewController {
                 guard let docs = obj?.documents else {
                     return
                 }
+                self.currentCard = nil
                 for doc in docs {
                     let newPunch = PunchCard(dictionary: doc.data())
                     if newPunch.dateRedeemed == nil {
@@ -232,6 +232,11 @@ class AccountInfoVC: UIViewController {
     }
     
     @objc func redeemPressed(_ sender: UITapGestureRecognizer) {
+        if currentCard!.index < 6 {
+            let alert = UIAlertController(title: "You still have \(6 - (currentCard?.index ?? 0)) visits until you can redeem a reward!", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         let redeemVC = RedeemVC()
         redeemVC.punchCard = currentCard
         self.show(redeemVC, sender: self)

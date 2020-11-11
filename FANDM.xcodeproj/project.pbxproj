@@ -18,6 +18,7 @@
 		5B32ACBB250FF8F600A8212B /* NewsItemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */; };
 		5B399C3D254F848E00488E00 /* MapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B399C3C254F848E00488E00 /* MapStyle.json */; };
 		5B399C422550AB4A00488E00 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B399C412550AB4A00488E00 /* SearchResultsVC.swift */; };
+		5B3F20D6255C5D48003F37E2 /* ContactUsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F20D5255C5D48003F37E2 /* ContactUsVC.swift */; };
 		5B40C39625590ABF00BE6F8F /* RecordVisitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B40C39525590ABF00BE6F8F /* RecordVisitVC.swift */; };
 		5B40C39B255A4EBB00BE6F8F /* RedeemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B40C39A255A4EBB00BE6F8F /* RedeemVC.swift */; };
 		5B5F26702540B94F005AAC8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B5F266F2540B94F005AAC8B /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		5B771A1225216B3700E3E0AA /* LogInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B771A1125216B3700E3E0AA /* LogInVC.swift */; };
 		5B771A1725216B7800E3E0AA /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B771A1625216B7800E3E0AA /* SignUpVC.swift */; };
 		5B771A1F25223E5400E3E0AA /* SurveyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B771A1E25223E5400E3E0AA /* SurveyVC.swift */; };
+		5B855877255C663D00843E09 /* CommentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B855876255C663D00843E09 /* CommentVC.swift */; };
 		5BC4C7FD2510030D003B0C41 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 5BC4C7FC2510030C003B0C41 /* Fonts */; };
 		5BC4C7FF25101052003B0C41 /* StoreItemDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC4C7FE25101052003B0C41 /* StoreItemDetailsVC.swift */; };
 		5BC4C80125113974003B0C41 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC4C80025113974003B0C41 /* FilterCell.swift */; };
@@ -73,6 +75,7 @@
 		5B32ACBA250FF8F600A8212B /* NewsItemDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemDetailsVC.swift; sourceTree = "<group>"; };
 		5B399C3C254F848E00488E00 /* MapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MapStyle.json; sourceTree = "<group>"; };
 		5B399C412550AB4A00488E00 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
+		5B3F20D5255C5D48003F37E2 /* ContactUsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsVC.swift; sourceTree = "<group>"; };
 		5B40C39525590ABF00BE6F8F /* RecordVisitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVisitVC.swift; sourceTree = "<group>"; };
 		5B40C39A255A4EBB00BE6F8F /* RedeemVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemVC.swift; sourceTree = "<group>"; };
 		5B4896642547337D000E907F /* FANDMRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FANDMRelease.entitlements; sourceTree = "<group>"; };
@@ -95,6 +98,7 @@
 		5B771A1125216B3700E3E0AA /* LogInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInVC.swift; sourceTree = "<group>"; };
 		5B771A1625216B7800E3E0AA /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		5B771A1E25223E5400E3E0AA /* SurveyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyVC.swift; sourceTree = "<group>"; };
+		5B855876255C663D00843E09 /* CommentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentVC.swift; sourceTree = "<group>"; };
 		5BC4C7FC2510030C003B0C41 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		5BC4C7FE25101052003B0C41 /* StoreItemDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreItemDetailsVC.swift; sourceTree = "<group>"; };
 		5BC4C80025113974003B0C41 /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
@@ -161,6 +165,7 @@
 		5B3CB0FE2540B5BE00D98086 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				5B3F20DA255C5D4E003F37E2 /* Settings */,
 				5B771A1625216B7800E3E0AA /* SignUpVC.swift */,
 				5B771A1125216B3700E3E0AA /* LogInVC.swift */,
 				5B771A1E25223E5400E3E0AA /* SurveyVC.swift */,
@@ -168,8 +173,6 @@
 				5B30FE4A253E353D008DA329 /* PunchCard.swift */,
 				5B30FE45253E3524008DA329 /* UserData.swift */,
 				5B30FE40253E18A6008DA329 /* AccountInfoVC.swift */,
-				5B632CD025534F5B0091DCED /* SettingsVC.swift */,
-				5BC74D512558BD23009E12D2 /* ChangeInfoVC.swift */,
 				5B40C39525590ABF00BE6F8F /* RecordVisitVC.swift */,
 				5B40C39A255A4EBB00BE6F8F /* RedeemVC.swift */,
 			);
@@ -197,6 +200,17 @@
 				5B649510250FD924007139DB /* LaunchScreen.storyboard */,
 			);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		5B3F20DA255C5D4E003F37E2 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				5B632CD025534F5B0091DCED /* SettingsVC.swift */,
+				5B3F20D5255C5D48003F37E2 /* ContactUsVC.swift */,
+				5BC74D512558BD23009E12D2 /* ChangeInfoVC.swift */,
+				5B855876255C663D00843E09 /* CommentVC.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		5B6494F9250FD922007139DB = {
@@ -482,6 +496,7 @@
 				5B32ACB9250FDE8600A8212B /* MapVC.swift in Sources */,
 				5BC4C7FF25101052003B0C41 /* StoreItemDetailsVC.swift in Sources */,
 				5BFE9BB12534CC6B00F996EB /* Store.swift in Sources */,
+				5B3F20D6255C5D48003F37E2 /* ContactUsVC.swift in Sources */,
 				5B32ACBB250FF8F600A8212B /* NewsItemDetailsVC.swift in Sources */,
 				5B399C422550AB4A00488E00 /* SearchResultsVC.swift in Sources */,
 				5B32ACB3250FDA8700A8212B /* TabBarVC.swift in Sources */,
@@ -493,6 +508,7 @@
 				5B771A1725216B7800E3E0AA /* SignUpVC.swift in Sources */,
 				5B632CD125534F5B0091DCED /* SettingsVC.swift in Sources */,
 				5B30FE46253E3524008DA329 /* UserData.swift in Sources */,
+				5B855877255C663D00843E09 /* CommentVC.swift in Sources */,
 				5B771A0525210D6000E3E0AA /* FeaturedCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

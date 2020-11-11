@@ -18,12 +18,13 @@ class Store {
     var address: String
     var phone: String
     var website: String
+    var views: Int
     
     var dictionary: [String: Any] {
-        return ["name": name, "description": description, "image": imageLink, "type": type, "lat": lat, "long": long, "address": address, "phone": phone, "website": website]
+        return ["name": name, "description": description, "image": imageLink, "type": type, "lat": lat, "long": long, "address": address, "phone": phone, "website": website, "views": views]
     }
     
-    init(name: String, description: String, imageLink: String, type: String, lat: Double, long: Double, address: String, phone: String, website: String) {
+    init(name: String, description: String, imageLink: String, type: String, lat: Double, long: Double, address: String, phone: String, website: String, views: Int) {
         self.name = name
         self.description = description
         self.imageLink = imageLink
@@ -33,6 +34,7 @@ class Store {
         self.phone = phone
         self.address = address
         self.website = website
+        self.views = views
     }
     
     convenience init(dictionary: [String: Any]) {
@@ -45,7 +47,14 @@ class Store {
         let phone = dictionary["phone"] as! String? ?? ""
         let address = dictionary["address"] as! String? ?? ""
         let website = dictionary["website"] as! String? ?? ""
+        let tempViews = dictionary["views"]
+        let views = { () -> Int in
+            if tempViews == nil {
+                return 0
+            }
+            return tempViews as! Int? ?? 0
+        }()
         
-        self.init(name: name, description: description, imageLink: imageLink, type: type, lat: lat, long: long, address: address, phone: phone, website: website)
+        self.init(name: name, description: description, imageLink: imageLink, type: type, lat: lat, long: long, address: address, phone: phone, website: website, views: views)
     }
 }

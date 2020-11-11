@@ -49,8 +49,8 @@ class SettingsVC: QuickTableViewController {
             Section(title: "Support", rows: [
                 NavigationRow(text: "Terms of Service", detailText: .value1(""), icon: .named("document"), action: nil),
                 NavigationRow(text: "Privacy Policy", detailText: .value1(""), icon: .named("document"), action: nil),
-                NavigationRow(text: "Leave a Comment", detailText: .value1(""), icon: .none, action: nil),
-                NavigationRow(text: "Contact Us", detailText: .value1(""), icon: .none, action: nil)]),
+                NavigationRow(text: "Leave a Comment", detailText: .value1(""), icon: .none, action: didToggleSelection()),
+                NavigationRow(text: "Contact Us", detailText: .value1(""), icon: .none, action: didToggleSelection())]),
             Section(title: "Account Actions", rows: [
                 NavigationRow(text: "Sign Out", detailText: .value1(passwordDetailText), icon: .none, action: didToggleSelection()),
                 NavigationRow(text: "Delete Account", detailText: .value1(passwordDetailText), icon: .none, action: didToggleSelection())])
@@ -78,8 +78,8 @@ class SettingsVC: QuickTableViewController {
                 Section(title: "Support", rows: [
                     NavigationRow(text: "Terms of Service", detailText: .value1(""), icon: .named("document"), action: nil),
                     NavigationRow(text: "Privacy Policy", detailText: .value1(""), icon: .named("document"), action: nil),
-                    NavigationRow(text: "Leave a Comment", detailText: .value1(""), icon: .none, action: nil),
-                    NavigationRow(text: "Contact Us", detailText: .value1(""), icon: .none, action: nil)]),
+                    NavigationRow(text: "Leave a Comment", detailText: .value1(""), icon: .none, action: didToggleSelection()),
+                    NavigationRow(text: "Contact Us", detailText: .value1(""), icon: .none, action: didToggleSelection())]),
                 Section(title: "Account Actions", rows: [
                     NavigationRow(text: "Sign Out", detailText: .value1(passwordDetailText), icon: .none, action: didToggleSelection()),
                     NavigationRow(text: "Delete Account", detailText: .value1(passwordDetailText), icon: .none, action: didToggleSelection())])
@@ -94,8 +94,8 @@ class SettingsVC: QuickTableViewController {
                 Section(title: "Support", rows: [
                     NavigationRow(text: "Terms of Service", detailText: .value1(""), icon: .named("document"), action: nil),
                     NavigationRow(text: "Privacy Policy", detailText: .value1(""), icon: .named("document"), action: nil),
-                    NavigationRow(text: "Leave a Comment", detailText: .value1(""), icon: .none, action: nil),
-                    NavigationRow(text: "Contact Us", detailText: .value1(""), icon: .none, action: nil)]),
+                    NavigationRow(text: "Leave a Comment", detailText: .value1(""), icon: .none, action: didToggleSelection()),
+                    NavigationRow(text: "Contact Us", detailText: .value1(""), icon: .none, action: didToggleSelection())]),
                 Section(title: "Account Actions", rows: [
                     NavigationRow(text: "Sign Out", detailText: .value1(passwordDetailText), icon: .none, action: nil),
                     NavigationRow(text: "Delete Account", detailText: .value1(passwordDetailText), icon: .none, action: nil)])
@@ -122,11 +122,11 @@ class SettingsVC: QuickTableViewController {
             }
             
             else if row.text == "Leave a Comment" {
-                
+                self?.show(CommentVC(), sender: self)
             }
             
             else if row.text == "Contact Us" {
-                
+                self?.show(ContactUsVC(), sender: self)
             }
             
             else if row.text == "Sign Out" {

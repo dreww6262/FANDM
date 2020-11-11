@@ -28,6 +28,8 @@ class StoreItemDetailsVC: UIViewController {
     var userData: UserData?
     var userDataRef: DocumentReference?
     
+    let db = Firestore.firestore()
+    
     
     var scrollView = UIScrollView()
     var contentView = UIView()
@@ -35,6 +37,18 @@ class StoreItemDetailsVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        store?.views += 1
+        db.collection("Stores").getDocuments(completion: {obj, error in
+            if (error == nil) {
+                for doc in obj!.documents {
+                    if (doc.get("name") as? String == self.store?.name) {
+                        doc.reference.setData(self.store!.dictionary)
+                    }
+                }
+            }
+        })
+        
         view.addSubview(navBar)
         view.backgroundColor = .white
         navBar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)

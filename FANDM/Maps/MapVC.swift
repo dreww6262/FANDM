@@ -50,6 +50,7 @@ class MapVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate, UI
         navBar?.titleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Poppins-SemiBold", size: 32) as Any]
         navBar?.shadowImage = UIImage()
         
+        contentView.frame = view.bounds
         searchBar.frame = CGRect(x: 0, y: 8, width: contentView.frame.width, height: 36)
         contentView.bringSubviewToFront(searchBar)
         searchBar.delegate = self
@@ -159,7 +160,7 @@ class MapVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate, UI
         let yPos = filterButtonCollection.frame.maxY + 16
         print("map ypos: \(yPos)")
         let camera = GMSCameraPosition.camera(withLatitude: 37.213177, longitude: -80.401291, zoom: 17.0)
-        mapView = GMSMapView.map(withFrame: CGRect(x: 0, y: yPos, width: contentView.frame.width, height: contentView.frame.height - yPos), camera: camera)
+        mapView = GMSMapView.map(withFrame: CGRect(x: 0, y: yPos, width: contentView.frame.width, height: contentView.frame.height - yPos - (navigationController?.navigationBar.frame.height ?? 0.0)), camera: camera)
         mapView?.delegate = self
         do {
             // Set the map style by passing the URL of the local file.
